@@ -332,9 +332,9 @@ button, .btn {
   flex-direction: column;
   align-items: center;
   gap: var(--brick-gap, 5px);
-  /* Shrink the whole pyramid to fit the viewport width */
   width: 100%;
   overflow: visible;
+  padding-top: 18px; /* room for the crown above the top brick */
 }
 
 .pyramid-row {
@@ -370,6 +370,38 @@ button, .btn {
   background: #d3f9d8;
   border-color: #40c057;
   color: #2f9e44;
+}
+
+/* ── Crown brick (top cell) ── */
+.brick--crown {
+  border-color: #adb5bd;
+  overflow: visible;
+  position: relative;
+}
+
+.brick--crown-solved {
+  background: #fff3bf;
+  border-color: #f59f00;
+  color: #e67700;
+  box-shadow: 0 0 12px rgba(245, 159, 0, 0.35);
+  transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.brick-crown {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 54%;
+  height: auto;
+  fill: #ced4da;
+  transition: fill 0.3s;
+  pointer-events: none;
+}
+
+.brick--crown-solved .brick-crown {
+  fill: #f59f00;
+  filter: drop-shadow(0 1px 3px rgba(245,159,0,0.5));
 }
 
 .brick input {

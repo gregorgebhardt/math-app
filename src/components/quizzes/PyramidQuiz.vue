@@ -17,6 +17,19 @@
           class="brick"
           :class="brickClass(rowIndex, colIndex, cell)"
         >
+          <!-- Crown decoration on the top brick -->
+          <svg
+            v-if="rowIndex === 0"
+            class="brick-crown"
+            viewBox="0 0 40 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <polygon points="0,20 0,6 10,14 20,0 30,14 40,6 40,20" />
+            <circle cx="0"  cy="6"  r="3"/>
+            <circle cx="20" cy="0"  r="3"/>
+            <circle cx="40" cy="6"  r="3"/>
+          </svg>
+
           <span v-if="isGiven(rowIndex, colIndex)">{{ cell }}</span>
           <input
             v-else
@@ -109,9 +122,11 @@ function isGiven(rowIndex, colIndex) {
 }
 
 function brickClass(rowIndex, colIndex, cell) {
-  if (isGiven(rowIndex, colIndex)) return 'brick--given'
-  if (userInputs.value[rowIndex]?.[colIndex] === cell) return 'brick--correct'
-  return ''
+  const isTop = rowIndex === 0
+  if (isGiven(rowIndex, colIndex)) return isTop ? 'brick--given brick--crown' : 'brick--given'
+  const correct = userInputs.value[rowIndex]?.[colIndex] === cell
+  if (isTop) return correct ? 'brick--crown brick--crown-solved' : 'brick--crown'
+  return correct ? 'brick--correct' : ''
 }
 
 function onInput(rowIndex, colIndex, event) {
