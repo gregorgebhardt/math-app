@@ -46,6 +46,20 @@
             >{{ opt.label }}</button>
           </div>
         </label>
+
+        <label class="option-label">
+          Hilfe-Steine?
+          <div class="toggle-row">
+            <button
+              class="toggle-btn"
+              :class="{ 'toggle-btn--active': prefillEnabled }"
+              @click="prefillEnabled = !prefillEnabled"
+            >
+              {{ prefillEnabled ? 'An' : 'Aus' }}
+            </button>
+            <span class="toggle-hint">Einige Felder werden vorausgefüllt</span>
+          </div>
+        </label>
       </template>
     </div>
 
@@ -68,6 +82,7 @@ const emit = defineEmits(['start'])
 const selectedKey = ref(null)
 const selectedRows = ref(3)
 const selectedMaxVal = ref(20)
+const prefillEnabled = ref(true)
 
 const rangeOptions = [
   { label: '1–20', value: 20 },
@@ -80,7 +95,7 @@ function start() {
   emit('start', {
     quizKey: selectedKey.value,
     options: selectedKey.value === 'pyramid'
-      ? { rows: selectedRows.value, maxVal: selectedMaxVal.value }
+      ? { rows: selectedRows.value, maxVal: selectedMaxVal.value, prefill: prefillEnabled.value }
       : {}
   })
 }

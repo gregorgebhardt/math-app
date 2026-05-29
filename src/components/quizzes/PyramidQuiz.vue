@@ -51,6 +51,10 @@ const props = defineProps({
   maxVal: {
     type: Number,
     default: 9
+  },
+  prefill: {
+    type: Boolean,
+    default: true
   }
 })
 
@@ -85,7 +89,7 @@ function choosePrefilled(pyr) {
 function initPuzzle() {
   inputRefs.value = []
   pyramid.value = generatePyramid(props.rows, props.maxVal)
-  prefilled.value = choosePrefilled(pyramid.value)
+  prefilled.value = props.prefill ? choosePrefilled(pyramid.value) : new Set()
   userInputs.value = pyramid.value.map(row => row.map(() => ''))
 }
 
