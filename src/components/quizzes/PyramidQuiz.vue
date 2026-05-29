@@ -58,9 +58,7 @@ const userInputs = ref([])
 
 function initPuzzle() {
   pyramid.value = generatePyramid(props.rows)
-  userInputs.value = pyramid.value.map((row, r) =>
-    r === pyramid.value.length - 1 ? row.map(() => '') : row.map(() => '')
-  )
+  userInputs.value = pyramid.value.map(row => row.map(() => ''))
 }
 
 function newPuzzle() {
