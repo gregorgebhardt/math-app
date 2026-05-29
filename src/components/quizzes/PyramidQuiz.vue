@@ -1,6 +1,6 @@
 <template>
   <div class="pyramid-quiz">
-    <div class="pyramid">
+    <div class="pyramid" :style="`--pyramid-cols: ${props.rows}`">
       <div
         v-for="(row, rowIndex) in pyramid"
         :key="rowIndex"

@@ -14,7 +14,7 @@ body {
 .app {
   max-width: 860px;
   margin: 0 auto;
-  padding: 2.5rem 1.5rem;
+  padding: 1.5rem 1rem;
 }
 
 /* ── Buttons ── */
@@ -51,17 +51,17 @@ button, .btn {
 .quiz-picker {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
 .app-title {
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-weight: 700;
   color: #212529;
 }
 
 .app-subtitle {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #6c757d;
 }
 
@@ -75,9 +75,9 @@ button, .btn {
   background: #fff;
   border: 2px solid #dee2e6;
   border-radius: 12px;
-  padding: 1.25rem 1.5rem;
+  padding: 1.1rem 1.25rem;
   cursor: pointer;
-  min-width: 220px;
+  flex: 1 1 220px;
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 .quiz-card:hover {
@@ -91,13 +91,14 @@ button, .btn {
 }
 
 .quiz-card-options {
-  margin-top: 1.25rem;
-  padding-top: 1.25rem;
+  margin-top: 1.1rem;
+  padding-top: 1.1rem;
   border-top: 1px solid #d0d9ff;
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
+
 .quiz-card-header {
   display: flex;
   align-items: center;
@@ -119,15 +120,9 @@ button, .btn {
 }
 
 /* ── Options ── */
-.quiz-options {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
 .option-label {
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 0.95rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -136,11 +131,12 @@ button, .btn {
 .row-selector {
   display: flex;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .row-btn {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.75rem;
+  height: 2.75rem;
   border-radius: 8px;
   border: 2px solid #dee2e6;
   background: #fff;
@@ -151,6 +147,7 @@ button, .btn {
   align-items: center;
   justify-content: center;
   padding: 0;
+  touch-action: manipulation;
   transition: border-color 0.15s, background 0.15s;
 }
 .row-btn:hover { border-color: #4c6ef5; }
@@ -163,11 +160,12 @@ button, .btn {
 .range-selector {
   display: flex;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .range-btn {
-  height: 2.5rem;
-  padding: 0 1rem;
+  height: 2.75rem;
+  padding: 0 0.9rem;
   border-radius: 8px;
   border: 2px solid #dee2e6;
   background: #fff;
@@ -177,6 +175,7 @@ button, .btn {
   display: flex;
   align-items: center;
   justify-content: center;
+  touch-action: manipulation;
   transition: border-color 0.15s, background 0.15s;
 }
 .range-btn:hover { border-color: #4c6ef5; }
@@ -195,7 +194,7 @@ button, .btn {
 
 .toggle-btn {
   width: 4rem;
-  height: 2.5rem;
+  height: 2.75rem;
   border-radius: 8px;
   border: 2px solid #dee2e6;
   background: #fff;
@@ -206,6 +205,7 @@ button, .btn {
   align-items: center;
   justify-content: center;
   padding: 0;
+  touch-action: manipulation;
   transition: border-color 0.15s, background 0.15s;
 }
 .toggle-btn:hover { border-color: #4c6ef5; }
@@ -221,36 +221,50 @@ button, .btn {
   font-weight: 400;
 }
 
+/* Full-width Starten inside card */
+.quiz-card-options .btn--large {
+  width: 100%;
+  margin-top: 0.25rem;
+}
+
 /* ── Pyramid ── */
 .pyramid-quiz {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 .pyramid {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: var(--brick-gap, 5px);
+  /* Shrink the whole pyramid to fit the viewport width */
+  width: 100%;
+  overflow: visible;
 }
 
 .pyramid-row {
   display: flex;
-  gap: 6px;
+  gap: var(--brick-gap, 5px);
+  justify-content: center;
 }
 
+/* Fluid brick size: fills available width for the widest row (= rows bricks).
+   --brick is clamped between 44px (min tap target) and 72px.
+   Formula: (100vw - 2*app-padding - (rows-1)*gap) / rows          */
 .brick {
-  width: 62px;
-  height: 62px;
+  --brick-gap: 5px;
+  width: clamp(44px, calc((100vw - 2rem - (var(--pyramid-cols, 3) - 1) * var(--brick-gap)) / var(--pyramid-cols, 3)), 72px);
+  height: clamp(44px, calc((100vw - 2rem - (var(--pyramid-cols, 3) - 1) * var(--brick-gap)) / var(--pyramid-cols, 3)), 72px);
   border: 2px solid #ced4da;
   border-radius: 8px;
   background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.3rem;
+  font-size: clamp(0.95rem, 3.5vw, 1.3rem);
   font-weight: 700;
   transition: background 0.2s, border-color 0.2s;
 }
@@ -272,7 +286,7 @@ button, .btn {
   border: none;
   background: transparent;
   text-align: center;
-  font-size: 1.3rem;
+  font-size: clamp(0.95rem, 3.5vw, 1.3rem);
   font-weight: 700;
   color: #212529;
   outline: none;
@@ -280,7 +294,7 @@ button, .btn {
 
 /* ── Success ── */
 .success {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 700;
   color: #2f9e44;
   animation: pop 0.4s ease-out;
@@ -295,5 +309,26 @@ button, .btn {
 /* ── Actions ── */
 .actions {
   display: flex;
-  gap: 1rem;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.actions .btn {
+  flex: 1;
+}
+
+/* ── Desktop enhancements ── */
+@media (min-width: 480px) {
+  .app {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .app-title {
+    font-size: 2rem;
+  }
+
+  .brick {
+    width: clamp(52px, calc((100vw - 3rem - (var(--pyramid-cols, 3) - 1) * var(--brick-gap)) / var(--pyramid-cols, 3)), 72px);
+    height: clamp(52px, calc((100vw - 3rem - (var(--pyramid-cols, 3) - 1) * var(--brick-gap)) / var(--pyramid-cols, 3)), 72px);
+  }
 }
