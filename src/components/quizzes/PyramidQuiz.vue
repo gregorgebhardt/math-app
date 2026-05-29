@@ -21,16 +21,16 @@
           <svg
             v-if="rowIndex === 0"
             class="brick-crown"
-            viewBox="0 0 48 26"
+            viewBox="0 0 48 28"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <rect x="0" y="18" width="48" height="8" rx="3"/>
-            <polygon points="0,26 0,15 10,20 18,8 24,0 30,8 38,20 48,15 48,26"/>
-            <circle cx="24" cy="0"  r="3.5"/>
-            <circle cx="0"  cy="15" r="2.5"/>
-            <circle cx="48" cy="15" r="2.5"/>
-            <circle cx="18" cy="8"  r="2"/>
-            <circle cx="30" cy="8"  r="2"/>
+            <rect x="0" y="20" width="48" height="8" rx="3"/>
+            <polygon points="0,28 0,17 9,25 18,7 24,0 30,7 39,25 48,17 48,28"/>
+            <circle cx="24" cy="0"  r="3"   fill="white" opacity="0.9"/>
+            <circle cx="0"  cy="17" r="2.2" fill="white" opacity="0.9"/>
+            <circle cx="48" cy="17" r="2.2" fill="white" opacity="0.9"/>
+            <circle cx="18" cy="7"  r="1.8" fill="white" opacity="0.85"/>
+            <circle cx="30" cy="7"  r="1.8" fill="white" opacity="0.85"/>
           </svg>
 
           <span v-if="isGiven(rowIndex, colIndex)">{{ cell }}</span>
