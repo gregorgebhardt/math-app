@@ -88,7 +88,8 @@ import IconSubtraction from '../icons/IconSubtraction.vue'
 
 const props = defineProps({
   count: { type: Number, default: 5 },
-  maxVal: { type: Number, default: 20 }
+  maxVal: { type: Number, default: 20 },
+  resultOnly: { type: Boolean, default: true }
 })
 
 defineEmits(['back'])
@@ -104,7 +105,9 @@ function generateProblem() {
   const b = Math.floor(Math.random() * (a - 1)) + 1             // 1..a-1
   const c = a - b
 
-  const blankPos = ['left', 'right', 'answer'][Math.floor(Math.random() * 3)]
+  const blankPos = props.resultOnly
+    ? 'answer'
+    : ['left', 'right', 'answer'][Math.floor(Math.random() * 3)]
   return {
     a, b, c,
     blankPos,
