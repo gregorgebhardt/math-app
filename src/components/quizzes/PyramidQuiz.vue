@@ -1,7 +1,7 @@
 <template>
   <div class="pyramid-quiz">
     <div class="quiz-header">
-      <span class="quiz-header-logo">🔺</span>
+      <IconPyramid :size="36" class="quiz-header-icon" />
       <h2 class="quiz-header-title">Additionspyramide</h2>
     </div>
 
@@ -47,6 +47,7 @@
 <script setup>
 import { ref, computed, nextTick } from 'vue'
 import { generatePyramid } from '../../utils/pyramid.js'
+import IconPyramid from '../icons/IconPyramid.vue'
 
 const props = defineProps({
   rows: {

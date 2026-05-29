@@ -1,7 +1,7 @@
 <template>
   <div class="subtraction-quiz">
     <div class="quiz-header">
-      <span class="quiz-header-logo">➖</span>
+      <IconSubtraction :size="36" class="quiz-header-icon" />
       <h2 class="quiz-header-title">Subtraktionsaufgaben</h2>
     </div>
 
@@ -75,6 +75,7 @@
 
 <script setup>
 import { ref, computed, nextTick } from 'vue'
+import IconSubtraction from '../icons/IconSubtraction.vue'
 
 const props = defineProps({
   count: { type: Number, default: 5 },

@@ -11,11 +11,11 @@
         :class="{ 'quiz-card--selected': selectedKey === key }"
         @click="selectedKey = key"
       >
-        <div class="quiz-card-header">
-          <span v-if="quiz.logo" class="quiz-card-logo">{{ quiz.logo }}</span>
-          <h2>{{ quiz.label }}</h2>
+        <div class="quiz-card-icon">
+          <component :is="quiz.icon" :size="52" />
         </div>
-        <p>{{ quiz.description }}</p>
+        <h2 class="quiz-card-title">{{ quiz.label }}</h2>
+        <p class="quiz-card-desc">{{ quiz.description }}</p>
 
         <div v-if="selectedKey === key" class="quiz-card-options" @click.stop>
 
