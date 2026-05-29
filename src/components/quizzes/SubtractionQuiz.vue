@@ -12,24 +12,51 @@
         class="sub-problem"
         :class="{ 'sub-problem--solved': isCorrect(i) }"
       >
-        <span class="sub-term">{{ problem.displayLeft }}</span>
-        <span class="sub-op">−</span>
-        <span class="sub-term">{{ problem.displayRight }}</span>
-        <span class="sub-op">=</span>
-        <div class="sub-answer">
-          <span v-if="isCorrect(i)" class="sub-given">{{ problem.answer }}</span>
+        <!-- left operand: blank or given -->
+        <div v-if="problem.blankPos === 'left'" class="sub-answer">
+          <span v-if="isCorrect(i)" class="sub-given">{{ problem.a }}</span>
           <input
             v-else
             :ref="el => { if (el) inputRefs[i] = el }"
-            type="text"
-            inputmode="numeric"
-            pattern="[0-9]*"
-            maxlength="3"
+            type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3"
             :value="userInputs[i]"
             @input="onInput(i, $event)"
             @keypress="allowOnlyDigits"
           />
         </div>
+        <span v-else class="sub-term">{{ problem.a }}</span>
+
+        <span class="sub-op">−</span>
+
+        <!-- right operand: blank or given -->
+        <div v-if="problem.blankPos === 'right'" class="sub-answer">
+          <span v-if="isCorrect(i)" class="sub-given">{{ problem.b }}</span>
+          <input
+            v-else
+            :ref="el => { if (el) inputRefs[i] = el }"
+            type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3"
+            :value="userInputs[i]"
+            @input="onInput(i, $event)"
+            @keypress="allowOnlyDigits"
+          />
+        </div>
+        <span v-else class="sub-term">{{ problem.b }}</span>
+
+        <span class="sub-op">=</span>
+
+        <!-- answer: blank or given -->
+        <div v-if="problem.blankPos === 'answer'" class="sub-answer">
+          <span v-if="isCorrect(i)" class="sub-given">{{ problem.c }}</span>
+          <input
+            v-else
+            :ref="el => { if (el) inputRefs[i] = el }"
+            type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3"
+            :value="userInputs[i]"
+            @input="onInput(i, $event)"
+            @keypress="allowOnlyDigits"
+          />
+        </div>
+        <span v-else class="sub-term">{{ problem.c }}</span>
       </div>
     </div>
 
@@ -70,8 +97,6 @@ function generateProblem() {
     a, b, c,
     blankPos,
     answer: blankPos === 'left' ? a : blankPos === 'right' ? b : c,
-    displayLeft:  blankPos === 'left'  ? null : a,
-    displayRight: blankPos === 'right' ? null : b,
   }
 }
 
