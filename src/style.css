@@ -227,6 +227,101 @@ button, .btn {
   margin-top: 0.25rem;
 }
 
+/* ── Quiz header (shared) ── */
+.quiz-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  align-self: flex-start;
+}
+
+.quiz-header-logo {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.quiz-header-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #212529;
+}
+
+/* ── Subtraction quiz ── */
+.subtraction-quiz {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.sub-problems {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.sub-problem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #fff;
+  border: 2px solid #dee2e6;
+  border-radius: 10px;
+  padding: 0.6rem 1rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.sub-problem--solved {
+  background: #d3f9d8;
+  border-color: #40c057;
+  color: #2f9e44;
+}
+
+.sub-term {
+  min-width: 2.5rem;
+  text-align: center;
+}
+
+.sub-op {
+  color: #6c757d;
+  font-weight: 600;
+}
+
+.sub-answer {
+  min-width: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sub-given {
+  text-align: center;
+}
+
+.sub-answer input {
+  width: 3.5rem;
+  height: 2.4rem;
+  border: 2px solid #ced4da;
+  border-radius: 8px;
+  background: #f8f9fa;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+  font-family: inherit;
+  color: #212529;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.sub-answer input:focus {
+  border-color: #4c6ef5;
+}
+
 /* ── Pyramid ── */
 .pyramid-quiz {
   display: flex;

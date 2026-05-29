@@ -1,5 +1,10 @@
 <template>
   <div class="pyramid-quiz">
+    <div class="quiz-header">
+      <span class="quiz-header-logo">🔺</span>
+      <h2 class="quiz-header-title">Additionspyramide</h2>
+    </div>
+
     <div class="pyramid" :style="`--pyramid-cols: ${props.rows}`">
       <div
         v-for="(row, rowIndex) in pyramid"
