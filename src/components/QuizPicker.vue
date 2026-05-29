@@ -11,7 +11,10 @@
         :class="{ 'quiz-card--selected': selectedKey === key }"
         @click="selectedKey = key"
       >
-        <h2>{{ quiz.label }}</h2>
+        <div class="quiz-card-header">
+          <span v-if="quiz.logo" class="quiz-card-logo">{{ quiz.logo }}</span>
+          <h2>{{ quiz.label }}</h2>
+        </div>
         <p>{{ quiz.description }}</p>
       </div>
     </div>
@@ -28,6 +31,19 @@
               :class="{ 'row-btn--active': selectedRows === n }"
               @click="selectedRows = n"
             >{{ n }}</button>
+          </div>
+        </label>
+
+        <label class="option-label">
+          Zahlenbereich (untere Reihe)?
+          <div class="range-selector">
+            <button
+              v-for="opt in rangeOptions"
+              :key="opt.value"
+              class="range-btn"
+              :class="{ 'range-btn--active': selectedMaxVal === opt.value }"
+              @click="selectedMaxVal = opt.value"
+            >{{ opt.label }}</button>
           </div>
         </label>
       </template>
@@ -51,12 +67,21 @@ const emit = defineEmits(['start'])
 
 const selectedKey = ref(null)
 const selectedRows = ref(3)
+const selectedMaxVal = ref(20)
+
+const rangeOptions = [
+  { label: '1–20', value: 20 },
+  { label: '1–50', value: 50 },
+  { label: '1–100', value: 100 }
+]
 
 function start() {
   if (!selectedKey.value) return
   emit('start', {
     quizKey: selectedKey.value,
-    options: selectedKey.value === 'pyramid' ? { rows: selectedRows.value } : {}
+    options: selectedKey.value === 'pyramid'
+      ? { rows: selectedRows.value, maxVal: selectedMaxVal.value }
+      : {}
   })
 }
 </script>

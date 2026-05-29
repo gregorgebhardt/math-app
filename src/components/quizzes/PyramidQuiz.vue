@@ -10,14 +10,12 @@
           v-for="(cell, colIndex) in row"
           :key="colIndex"
           class="brick"
-          :class="{
-            'brick--given': rowIndex === pyramid.length - 1,
-            'brick--correct': rowIndex !== pyramid.length - 1 && userInputs[rowIndex][colIndex] === cell
-          }"
+          :class="brickClass(rowIndex, colIndex, cell)"
         >
-          <span v-if="rowIndex === pyramid.length - 1">{{ cell }}</span>
+          <span v-if="isGiven(rowIndex, colIndex)">{{ cell }}</span>
           <input
             v-else
+            :ref="el => setInputRef(el, rowIndex, colIndex)"
             type="text"
             inputmode="numeric"
             :maxlength="maxDigits"
@@ -41,7 +39,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, nextTick } from 'vue'
 import { generatePyramid } from '../../utils/pyramid.js'
 
 const props = defineProps({
@@ -49,6 +47,10 @@ const props = defineProps({
     type: Number,
     default: 3,
     validator: v => v >= 2 && v <= 6
+  },
+  maxVal: {
+    type: Number,
+    default: 9
   }
 })
 
@@ -56,9 +58,34 @@ defineEmits(['back'])
 
 const pyramid = ref([])
 const userInputs = ref([])
+const prefilled = ref([])   // Set of "rowIndex,colIndex" strings that are pre-revealed
+
+// 2D array of input DOM elements, indexed [rowIndex][colIndex]
+const inputRefs = ref([])
+
+function setInputRef(el, rowIndex, colIndex) {
+  if (!inputRefs.value[rowIndex]) inputRefs.value[rowIndex] = []
+  inputRefs.value[rowIndex][colIndex] = el
+}
+
+// Roughly 1 in 4 upper cells are pre-filled (excluding top cell and bottom row)
+function choosePrefilled(pyr) {
+  const set = new Set()
+  const n = pyr.length
+  // Always show bottom row (given). Optionally pre-fill some middle cells.
+  if (n <= 2) return set
+  for (let r = 0; r < n - 1; r++) {
+    for (let c = 0; c < pyr[r].length; c++) {
+      if (Math.random() < 0.25) set.add(`${r},${c}`)
+    }
+  }
+  return set
+}
 
 function initPuzzle() {
-  pyramid.value = generatePyramid(props.rows)
+  inputRefs.value = []
+  pyramid.value = generatePyramid(props.rows, props.maxVal)
+  prefilled.value = choosePrefilled(pyramid.value)
   userInputs.value = pyramid.value.map(row => row.map(() => ''))
 }
 
@@ -66,22 +93,62 @@ function newPuzzle() {
   initPuzzle()
 }
 
+function isGiven(rowIndex, colIndex) {
+  return rowIndex === pyramid.value.length - 1 || prefilled.value.has(`${rowIndex},${colIndex}`)
+}
+
+function brickClass(rowIndex, colIndex, cell) {
+  if (isGiven(rowIndex, colIndex)) return 'brick--given'
+  if (userInputs.value[rowIndex]?.[colIndex] === cell) return 'brick--correct'
+  return ''
+}
+
 function onInput(rowIndex, colIndex, event) {
   const raw = event.target.value.replace(/\D/g, '')
-  userInputs.value[rowIndex][colIndex] = raw === '' ? '' : parseInt(raw, 10)
+  const val = raw === '' ? '' : parseInt(raw, 10)
+  userInputs.value[rowIndex][colIndex] = val
+
+  if (val === pyramid.value[rowIndex][colIndex]) {
+    nextTick(() => focusNext(rowIndex, colIndex))
+  }
 }
 
 function allowOnlyDigits(event) {
   if (!/\d/.test(event.key)) event.preventDefault()
 }
 
-// Max possible cell value: 9 * 2^(rows-1); derive digit count
-const maxDigits = computed(() => String(9 * Math.pow(2, props.rows - 1)).length)
+// Advance cursor: left-to-right within a row, then up to next row
+function focusNext(rowIndex, colIndex) {
+  const n = pyramid.value.length
+  let r = rowIndex
+  let c = colIndex
+
+  while (true) {
+    c++
+    if (c >= pyramid.value[r].length) {
+      r--
+      c = 0
+      if (r < 0) return // top reached, done
+    }
+    if (!isGiven(r, c) && userInputs.value[r][c] !== pyramid.value[r][c]) {
+      inputRefs.value[r]?.[c]?.focus()
+      return
+    }
+  }
+}
+
+// Max possible cell value for maxlength calculation
+const maxDigits = computed(() => {
+  const maxTop = props.maxVal * Math.pow(2, props.rows - 1)
+  return String(Math.ceil(maxTop)).length
+})
 
 const isSolved = computed(() => {
   return pyramid.value.every((row, r) => {
     if (r === pyramid.value.length - 1) return true
-    return row.every((cell, c) => userInputs.value[r][c] === cell)
+    return row.every((cell, c) => {
+      return isGiven(r, c) || userInputs.value[r][c] === cell
+    })
   })
 })
 
