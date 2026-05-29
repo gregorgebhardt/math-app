@@ -19,96 +19,125 @@
 
         <div v-if="selectedKey === key" class="quiz-card-options" @click.stop>
 
-          <!-- Pyramid options -->
-          <template v-if="key === 'pyramid'">
-            <label class="option-label">
-              Wie viele Reihen?
-              <div class="row-selector">
-                <button
-                  v-for="n in [2, 3, 4, 5, 6]"
-                  :key="n"
-                  class="row-btn"
-                  :class="{ 'row-btn--active': selectedRows === n }"
-                  @click.stop="selectedRows = n"
-                >{{ n }}</button>
+          <!-- Simple mode: hardness slider -->
+          <template v-if="props.simpleMode">
+            <div class="hardness-picker">
+              <div class="hardness-label">
+                <span class="hardness-emoji">{{ hardnessLevels[hardness - 1].emoji }}</span>
+                <span class="hardness-name">{{ hardnessLevels[hardness - 1].label }}</span>
               </div>
-            </label>
-
-            <label class="option-label">
-              Zahlenbereich (untere Reihe)?
-              <div class="range-selector">
-                <button
-                  v-for="opt in pyramidRangeOptions"
-                  :key="opt.value"
-                  class="range-btn"
-                  :class="{ 'range-btn--active': selectedPyramidMaxVal === opt.value }"
-                  @click.stop="selectedPyramidMaxVal = opt.value"
-                >{{ opt.label }}</button>
+              <div class="hardness-track-wrap">
+                <input
+                  type="range"
+                  min="1"
+                  max="5"
+                  :value="hardness"
+                  class="hardness-slider"
+                  @input="hardness = Number($event.target.value)"
+                  @click.stop
+                />
+                <div class="hardness-ticks">
+                  <span v-for="n in 5" :key="n" class="hardness-tick" :class="{ 'hardness-tick--active': n <= hardness }"></span>
+                </div>
               </div>
-            </label>
-
-            <label class="option-label">
-              Hilfe-Steine?
-              <div class="toggle-row">
-                <button
-                  class="toggle-btn"
-                  :class="{ 'toggle-btn--active': prefillEnabled }"
-                  @click.stop="prefillEnabled = !prefillEnabled"
-                >
-                  {{ prefillEnabled ? 'An' : 'Aus' }}
-                </button>
-                <span class="toggle-hint">Einige Felder werden vorausgefüllt</span>
-              </div>
-            </label>
+            </div>
           </template>
 
-          <!-- Subtraction options -->
-          <template v-else-if="key === 'subtraction'">
-            <label class="option-label">
-              Wie viele Aufgaben?
-              <div class="row-selector">
-                <button
-                  v-for="n in [3, 5, 8, 10]"
-                  :key="n"
-                  class="row-btn"
-                  :class="{ 'row-btn--active': selectedCount === n }"
-                  @click.stop="selectedCount = n"
-                >{{ n }}</button>
-              </div>
-            </label>
+          <!-- Advanced mode: per-quiz controls -->
+          <template v-else>
 
-            <label class="option-label">
-              Zahlenbereich?
-              <div class="range-selector">
-                <button
-                  v-for="opt in subRangeOptions"
-                  :key="opt.value"
-                  class="range-btn"
-                  :class="{ 'range-btn--active': selectedSubMaxVal === opt.value }"
-                  @click.stop="selectedSubMaxVal = opt.value"
-                >{{ opt.label }}</button>
-              </div>
-            </label>
+            <!-- Pyramid options -->
+            <template v-if="key === 'pyramid'">
+              <label class="option-label">
+                Wie viele Reihen?
+                <div class="row-selector">
+                  <button
+                    v-for="n in [2, 3, 4, 5, 6]"
+                    :key="n"
+                    class="row-btn"
+                    :class="{ 'row-btn--active': selectedRows === n }"
+                    @click.stop="selectedRows = n"
+                  >{{ n }}</button>
+                </div>
+              </label>
 
-            <label class="option-label">
-              Fehlende Zahl?
-              <div class="toggle-row">
-                <button
-                  class="toggle-btn toggle-btn--wide"
-                  :class="{ 'toggle-btn--active': resultOnly }"
-                  @click.stop="resultOnly = true"
-                >
-                  Ergebnis
-                </button>
-                <button
-                  class="toggle-btn toggle-btn--wide"
-                  :class="{ 'toggle-btn--active': !resultOnly }"
-                  @click.stop="resultOnly = false"
-                >
-                  Beliebig
-                </button>
-              </div>
-            </label>
+              <label class="option-label">
+                Zahlenbereich (untere Reihe)?
+                <div class="range-selector">
+                  <button
+                    v-for="opt in pyramidRangeOptions"
+                    :key="opt.value"
+                    class="range-btn"
+                    :class="{ 'range-btn--active': selectedPyramidMaxVal === opt.value }"
+                    @click.stop="selectedPyramidMaxVal = opt.value"
+                  >{{ opt.label }}</button>
+                </div>
+              </label>
+
+              <label class="option-label">
+                Hilfe-Steine?
+                <div class="toggle-row">
+                  <button
+                    class="toggle-btn"
+                    :class="{ 'toggle-btn--active': prefillEnabled }"
+                    @click.stop="prefillEnabled = !prefillEnabled"
+                  >
+                    {{ prefillEnabled ? 'An' : 'Aus' }}
+                  </button>
+                  <span class="toggle-hint">Einige Felder werden vorausgefüllt</span>
+                </div>
+              </label>
+            </template>
+
+            <!-- Subtraction options -->
+            <template v-else-if="key === 'subtraction'">
+              <label class="option-label">
+                Wie viele Aufgaben?
+                <div class="row-selector">
+                  <button
+                    v-for="n in [3, 5, 8, 10]"
+                    :key="n"
+                    class="row-btn"
+                    :class="{ 'row-btn--active': selectedCount === n }"
+                    @click.stop="selectedCount = n"
+                  >{{ n }}</button>
+                </div>
+              </label>
+
+              <label class="option-label">
+                Zahlenbereich?
+                <div class="range-selector">
+                  <button
+                    v-for="opt in subRangeOptions"
+                    :key="opt.value"
+                    class="range-btn"
+                    :class="{ 'range-btn--active': selectedSubMaxVal === opt.value }"
+                    @click.stop="selectedSubMaxVal = opt.value"
+                  >{{ opt.label }}</button>
+                </div>
+              </label>
+
+              <label class="option-label">
+                Fehlende Zahl?
+                <div class="toggle-row">
+                  <button
+                    class="toggle-btn toggle-btn--wide"
+                    :class="{ 'toggle-btn--active': resultOnly }"
+                    @click.stop="resultOnly = true"
+                  >
+                    Ergebnis
+                  </button>
+                  <button
+                    class="toggle-btn toggle-btn--wide"
+                    :class="{ 'toggle-btn--active': !resultOnly }"
+                    @click.stop="resultOnly = false"
+                  >
+                    Beliebig
+                  </button>
+                </div>
+              </label>
+            </template>
+
           </template>
 
           <button class="btn btn--primary btn--large" @click.stop="start">
@@ -122,11 +151,16 @@
 
 <script setup>
 import { ref } from 'vue'
-import { quizzes } from '../quizzes.js'
+import { quizzes, hardnessLevels } from '../quizzes.js'
+
+const props = defineProps({
+  simpleMode: { type: Boolean, default: true }
+})
 
 const emit = defineEmits(['start'])
 
 const selectedKey = ref(null)
+const hardness = ref(2)
 
 // Pyramid options
 const selectedRows = ref(3)
@@ -155,11 +189,16 @@ const subRangeOptions = [
 function start() {
   if (!selectedKey.value) return
   let options = {}
-  if (selectedKey.value === 'pyramid') {
+  const quiz = quizzes[selectedKey.value]
+
+  if (props.simpleMode) {
+    options = { ...quiz.hardnessPresets[hardness.value - 1] }
+  } else if (selectedKey.value === 'pyramid') {
     options = { rows: selectedRows.value, maxVal: selectedPyramidMaxVal.value, prefill: prefillEnabled.value }
   } else if (selectedKey.value === 'subtraction') {
     options = { count: selectedCount.value, maxVal: selectedSubMaxVal.value, resultOnly: resultOnly.value }
   }
+
   emit('start', { quizKey: selectedKey.value, options })
 }
 </script>

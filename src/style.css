@@ -409,6 +409,119 @@ button, .btn {
   margin-top: 0.25rem;
 }
 
+/* ── Hardness picker (simple mode) ── */
+.hardness-picker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0 0.25rem;
+}
+
+.hardness-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'Fredoka', system-ui, sans-serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--color-text);
+  min-height: 2rem;
+}
+
+.hardness-emoji {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.hardness-track-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.hardness-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(to right, #51cf66 0%, #f59f00 50%, #ff6b6b 100%);
+  outline: none;
+  cursor: pointer;
+}
+
+.hardness-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--color-amber);
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.22);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.hardness-slider::-webkit-slider-thumb:active {
+  transform: scale(1.15);
+}
+
+.hardness-slider::-moz-range-thumb {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--color-amber);
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.22);
+  cursor: pointer;
+}
+
+.hardness-ticks {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2px;
+}
+
+.hardness-tick {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-border);
+  transition: background 0.2s;
+}
+
+.hardness-tick--active {
+  background: var(--color-amber);
+}
+
+/* ── App footer ── */
+.app-footer {
+  display: flex;
+  justify-content: center;
+  padding: 1.25rem 0 0.5rem;
+}
+
+.footer-mode-toggle {
+  background: none;
+  border: none;
+  color: var(--color-muted);
+  font-family: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s, background 0.15s;
+  touch-action: manipulation;
+}
+
+.footer-mode-toggle:hover {
+  color: var(--color-text);
+  background: var(--color-border);
+}
+
 /* ── Quiz header (shared) ── */
 .quiz-header {
   display: flex;
