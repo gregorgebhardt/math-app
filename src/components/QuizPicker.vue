@@ -17,7 +17,7 @@
         </div>
         <p>{{ quiz.description }}</p>
 
-        <div v-if="selectedKey === key && key === 'pyramid'" class="quiz-card-options" @click.stop>
+        <div v-if="selectedKey === key" class="quiz-card-options" @click.stop>
           <label class="option-label">
             Wie viele Reihen?
             <div class="row-selector">
@@ -57,17 +57,13 @@
               <span class="toggle-hint">Einige Felder werden vorausgefüllt</span>
             </div>
           </label>
+
+          <button class="btn btn--primary btn--large" @click.stop="start">
+            Starten
+          </button>
         </div>
       </div>
     </div>
-
-    <button
-      v-if="selectedKey"
-      class="btn btn--primary btn--large"
-      @click="start"
-    >
-      Starten
-    </button>
   </div>
 </template>
 
