@@ -18,6 +18,7 @@
             :ref="el => setInputRef(el, rowIndex, colIndex)"
             type="text"
             inputmode="numeric"
+            pattern="[0-9]*"
             :maxlength="maxDigits"
             :value="userInputs[rowIndex][colIndex]"
             @input="onInput(rowIndex, colIndex, $event)"
