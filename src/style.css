@@ -479,23 +479,6 @@ button, .btn {
   cursor: pointer;
 }
 
-.hardness-ticks {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 2px;
-}
-
-.hardness-tick {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--color-border);
-  transition: background 0.2s;
-}
-
-.hardness-tick--active {
-  background: var(--color-amber);
-}
 
 /* ── App footer ── */
 .app-footer {

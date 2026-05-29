@@ -3,13 +3,13 @@
     <h1 class="app-title">Mathe Übungen</h1>
     <p class="app-subtitle">Wähle eine Aufgabe:</p>
 
-    <div class="quiz-cards">
+    <div class="quiz-cards" @click="selectedKey = null">
       <div
         v-for="(quiz, key) in quizzes"
         :key="key"
         class="quiz-card"
         :class="{ 'quiz-card--selected': selectedKey === key }"
-        @click="selectedKey = key"
+        @click.stop="selectedKey = key"
       >
         <div class="quiz-card-icon">
           <component :is="quiz.icon" :size="52" />
@@ -36,10 +36,7 @@
                   @input="hardness = Number($event.target.value)"
                   @click.stop
                 />
-                <div class="hardness-ticks">
-                  <span v-for="n in 5" :key="n" class="hardness-tick" :class="{ 'hardness-tick--active': n <= hardness }"></span>
                 </div>
-              </div>
             </div>
           </template>
 
