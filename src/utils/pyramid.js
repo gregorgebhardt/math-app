@@ -1,4 +1,4 @@
-export function generatePyramid(rows, maxVal = 9) {
+export function generatePyramid(rows, maxVal = 10) {
   const pyramid = Array.from({ length: rows }, (_, r) => new Array(r + 1).fill(0))
 
   const bottom = pyramid[rows - 1]

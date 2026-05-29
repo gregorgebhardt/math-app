@@ -33,13 +33,21 @@ describe('generatePyramid', () => {
     }
   })
 
-  it('bottom row values are between 1 and 9', () => {
+  it('bottom row values are between 1 and maxVal', () => {
     for (let i = 0; i < 20; i++) {
-      const pyramid = generatePyramid(4)
+      const pyramid = generatePyramid(4, 10)
       const bottom = pyramid[pyramid.length - 1]
       bottom.forEach(v => {
         expect(v).toBeGreaterThanOrEqual(1)
-        expect(v).toBeLessThanOrEqual(9)
+        expect(v).toBeLessThanOrEqual(10)
+      })
+    }
+    for (let i = 0; i < 20; i++) {
+      const pyramid = generatePyramid(4, 100)
+      const bottom = pyramid[pyramid.length - 1]
+      bottom.forEach(v => {
+        expect(v).toBeGreaterThanOrEqual(1)
+        expect(v).toBeLessThanOrEqual(100)
       })
     }
   })

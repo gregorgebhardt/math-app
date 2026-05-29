@@ -87,6 +87,16 @@ button, .btn {
 .quiz-card--selected {
   border-color: #4c6ef5;
   background: #eef2ff;
+  cursor: default;
+}
+
+.quiz-card-options {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #d0d9ff;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 .quiz-card-header {
   display: flex;

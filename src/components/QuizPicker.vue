@@ -16,51 +16,49 @@
           <h2>{{ quiz.label }}</h2>
         </div>
         <p>{{ quiz.description }}</p>
+
+        <div v-if="selectedKey === key && key === 'pyramid'" class="quiz-card-options" @click.stop>
+          <label class="option-label">
+            Wie viele Reihen?
+            <div class="row-selector">
+              <button
+                v-for="n in [2, 3, 4, 5, 6]"
+                :key="n"
+                class="row-btn"
+                :class="{ 'row-btn--active': selectedRows === n }"
+                @click.stop="selectedRows = n"
+              >{{ n }}</button>
+            </div>
+          </label>
+
+          <label class="option-label">
+            Zahlenbereich (untere Reihe)?
+            <div class="range-selector">
+              <button
+                v-for="opt in rangeOptions"
+                :key="opt.value"
+                class="range-btn"
+                :class="{ 'range-btn--active': selectedMaxVal === opt.value }"
+                @click.stop="selectedMaxVal = opt.value"
+              >{{ opt.label }}</button>
+            </div>
+          </label>
+
+          <label class="option-label">
+            Hilfe-Steine?
+            <div class="toggle-row">
+              <button
+                class="toggle-btn"
+                :class="{ 'toggle-btn--active': prefillEnabled }"
+                @click.stop="prefillEnabled = !prefillEnabled"
+              >
+                {{ prefillEnabled ? 'An' : 'Aus' }}
+              </button>
+              <span class="toggle-hint">Einige Felder werden vorausgefüllt</span>
+            </div>
+          </label>
+        </div>
       </div>
-    </div>
-
-    <div v-if="selectedKey" class="quiz-options">
-      <template v-if="selectedKey === 'pyramid'">
-        <label class="option-label">
-          Wie viele Reihen?
-          <div class="row-selector">
-            <button
-              v-for="n in [2, 3, 4, 5, 6]"
-              :key="n"
-              class="row-btn"
-              :class="{ 'row-btn--active': selectedRows === n }"
-              @click="selectedRows = n"
-            >{{ n }}</button>
-          </div>
-        </label>
-
-        <label class="option-label">
-          Zahlenbereich (untere Reihe)?
-          <div class="range-selector">
-            <button
-              v-for="opt in rangeOptions"
-              :key="opt.value"
-              class="range-btn"
-              :class="{ 'range-btn--active': selectedMaxVal === opt.value }"
-              @click="selectedMaxVal = opt.value"
-            >{{ opt.label }}</button>
-          </div>
-        </label>
-
-        <label class="option-label">
-          Hilfe-Steine?
-          <div class="toggle-row">
-            <button
-              class="toggle-btn"
-              :class="{ 'toggle-btn--active': prefillEnabled }"
-              @click="prefillEnabled = !prefillEnabled"
-            >
-              {{ prefillEnabled ? 'An' : 'Aus' }}
-            </button>
-            <span class="toggle-hint">Einige Felder werden vorausgefüllt</span>
-          </div>
-        </label>
-      </template>
     </div>
 
     <button
@@ -81,10 +79,11 @@ const emit = defineEmits(['start'])
 
 const selectedKey = ref(null)
 const selectedRows = ref(3)
-const selectedMaxVal = ref(20)
-const prefillEnabled = ref(true)
+const selectedMaxVal = ref(10)
+const prefillEnabled = ref(false)
 
 const rangeOptions = [
+  { label: '1–10', value: 10 },
   { label: '1–20', value: 20 },
   { label: '1–50', value: 50 },
   { label: '1–100', value: 100 }

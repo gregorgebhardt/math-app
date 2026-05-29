@@ -50,7 +50,7 @@ const props = defineProps({
   },
   maxVal: {
     type: Number,
-    default: 9
+    default: 10
   },
   prefill: {
     type: Boolean,
