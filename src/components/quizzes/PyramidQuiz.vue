@@ -20,7 +20,7 @@
             v-else
             type="text"
             inputmode="numeric"
-            maxlength="4"
+            :maxlength="maxDigits"
             :value="userInputs[rowIndex][colIndex]"
             @input="onInput(rowIndex, colIndex, $event)"
             @keypress="allowOnlyDigits"
@@ -47,7 +47,8 @@ import { generatePyramid } from '../../utils/pyramid.js'
 const props = defineProps({
   rows: {
     type: Number,
-    default: 3
+    default: 3,
+    validator: v => v >= 2 && v <= 6
   }
 })
 
@@ -74,6 +75,9 @@ function allowOnlyDigits(event) {
   if (!/\d/.test(event.key)) event.preventDefault()
 }
 
+// Max possible cell value: 9 * 2^(rows-1); derive digit count
+const maxDigits = computed(() => String(9 * Math.pow(2, props.rows - 1)).length)
+
 const isSolved = computed(() => {
   return pyramid.value.every((row, r) => {
     if (r === pyramid.value.length - 1) return true
@@ -82,4 +86,7 @@ const isSolved = computed(() => {
 })
 
 initPuzzle()
+
+// Styles for this component live in src/style.css (global, by design —
+// shared brick/button classes are reused across quiz types).
 </script>
