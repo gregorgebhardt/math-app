@@ -218,6 +218,11 @@ button, .btn {
   color: #fff;
 }
 
+.toggle-btn--wide {
+  width: auto;
+  padding: 0 0.75rem;
+}
+
 .toggle-hint {
   font-size: 0.85rem;
   color: #6c757d;

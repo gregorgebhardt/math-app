@@ -94,14 +94,14 @@
               Fehlende Zahl?
               <div class="toggle-row">
                 <button
-                  class="toggle-btn"
+                  class="toggle-btn toggle-btn--wide"
                   :class="{ 'toggle-btn--active': resultOnly }"
                   @click.stop="resultOnly = true"
                 >
                   Ergebnis
                 </button>
                 <button
-                  class="toggle-btn"
+                  class="toggle-btn toggle-btn--wide"
                   :class="{ 'toggle-btn--active': !resultOnly }"
                   @click.stop="resultOnly = false"
                 >
