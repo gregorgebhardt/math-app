@@ -260,6 +260,38 @@ button, .btn {
   margin: 0 auto;
 }
 
+.sub-problems-wrapper {
+  position: relative;
+  padding-top: 22px; /* room for crown */
+  border: 2px solid #dee2e6;
+  border-radius: 14px;
+  padding: 22px 0.75rem 0.75rem;
+  background: transparent;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.sub-problems-wrapper--solved {
+  border-color: #f59f00;
+  box-shadow: 0 0 16px rgba(245, 159, 0, 0.3);
+}
+
+.sub-crown {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: auto;
+  fill: #ced4da;
+  transition: fill 0.3s, filter 0.3s;
+  pointer-events: none;
+}
+
+.sub-problems-wrapper--solved .sub-crown {
+  fill: #f59f00;
+  filter: drop-shadow(0 1px 4px rgba(245,159,0,0.55));
+}
+
 .sub-problems {
   display: flex;
   flex-direction: column;

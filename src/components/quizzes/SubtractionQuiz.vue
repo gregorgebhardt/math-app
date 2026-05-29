@@ -5,6 +5,14 @@
       <h2 class="quiz-header-title">Subtraktionsaufgaben</h2>
     </div>
 
+    <div class="sub-problems-wrapper" :class="{ 'sub-problems-wrapper--solved': isSolved }">
+      <svg class="sub-crown" viewBox="0 0 80 36" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="0,36 0,10 20,26 40,0 60,26 80,10 80,36"/>
+        <circle cx="0"  cy="10" r="5"/>
+        <circle cx="40" cy="0"  r="5"/>
+        <circle cx="80" cy="10" r="5"/>
+      </svg>
+
     <div class="sub-problems">
       <div
         v-for="(problem, i) in problems"
@@ -60,6 +68,7 @@
           />
         </div>
       </div>
+    </div>
     </div>
 
     <div v-if="isSolved" class="success" style="text-align:center">
