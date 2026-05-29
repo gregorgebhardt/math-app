@@ -23,17 +23,17 @@
           <template v-if="props.simpleMode">
             <div class="hardness-picker">
               <div class="hardness-label">
-                <span class="hardness-emoji">{{ hardnessLevels[hardness - 1].emoji }}</span>
-                <span class="hardness-name">{{ hardnessLevels[hardness - 1].label }}</span>
+                <span class="hardness-emoji">{{ hardnessLevels[hardness[key] - 1].emoji }}</span>
+                <span class="hardness-name">{{ hardnessLevels[hardness[key] - 1].label }}</span>
               </div>
               <div class="hardness-track-wrap">
                 <input
                   type="range"
                   min="1"
                   max="5"
-                  :value="hardness"
+                  :value="hardness[key]"
                   class="hardness-slider"
-                  @input="hardness = Number($event.target.value)"
+                  @input="setHardness(key, Number($event.target.value))"
                   @click.stop
                 />
                 </div>
@@ -165,7 +165,12 @@ function loadSettings() {
 const saved = loadSettings()
 
 const selectedKey = ref(null)
-const hardness = ref(saved.hardness ?? 2)
+
+// Per-quiz hardness levels (slider position stored independently per quiz)
+const hardness = ref({
+  pyramid:     saved.hardness?.pyramid     ?? 2,
+  subtraction: saved.hardness?.subtraction ?? 2,
+})
 
 // Pyramid options
 const selectedRows = ref(saved.selectedRows ?? 3)
@@ -191,18 +196,21 @@ const subRangeOptions = [
   { label: '1–100', value: 100 }
 ]
 
-// Slider → advanced settings sync
-watch(hardness, (level) => {
-  const p = quizzes.pyramid.hardnessPresets[level - 1]
-  selectedRows.value = p.rows
-  selectedPyramidMaxVal.value = p.maxVal
-  prefillEnabled.value = p.prefill
-
-  const s = quizzes.subtraction.hardnessPresets[level - 1]
-  selectedCount.value = s.count
-  selectedSubMaxVal.value = s.maxVal
-  resultOnly.value = s.resultOnly
-})
+// Slider move: sync only the relevant quiz's advanced settings
+function setHardness(key, level) {
+  hardness.value[key] = level
+  if (key === 'pyramid') {
+    const p = quizzes.pyramid.hardnessPresets[level - 1]
+    selectedRows.value = p.rows
+    selectedPyramidMaxVal.value = p.maxVal
+    prefillEnabled.value = p.prefill
+  } else if (key === 'subtraction') {
+    const s = quizzes.subtraction.hardnessPresets[level - 1]
+    selectedCount.value = s.count
+    selectedSubMaxVal.value = s.maxVal
+    resultOnly.value = s.resultOnly
+  }
+}
 
 // Persist all settings on any change
 watch(
@@ -215,7 +223,8 @@ watch(
     selectedCount: selectedCount.value,
     selectedSubMaxVal: selectedSubMaxVal.value,
     resultOnly: resultOnly.value,
-  }))
+  })),
+  { deep: true }
 )
 
 // start() always reads from advanced refs (slider syncs them)
