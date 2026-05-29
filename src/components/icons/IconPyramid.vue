@@ -4,8 +4,8 @@
     <!-- top: 1 brick, 20px wide, centered -->
     <rect x="30" y="2"  width="20" height="18" rx="5" fill="currentColor"/>
     <!-- middle: 2 bricks, spanning 60px total -->
-    <rect x="10" y="26" width="20" height="18" rx="5" fill="currentColor" opacity="0.7"/>
-    <rect x="50" y="26" width="20" height="18" rx="5" fill="currentColor" opacity="0.7"/>
+    <rect x="15" y="26" width="20" height="18" rx="5" fill="currentColor" opacity="0.7"/>
+    <rect x="45" y="26" width="20" height="18" rx="5" fill="currentColor" opacity="0.7"/>
     <!-- bottom: 3 bricks, spanning 80px total -->
     <rect x="0"  y="50" width="20" height="18" rx="5" fill="currentColor" opacity="0.42"/>
     <rect x="30" y="50" width="20" height="18" rx="5" fill="currentColor" opacity="0.42"/>

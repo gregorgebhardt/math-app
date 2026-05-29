@@ -446,7 +446,7 @@ button, .btn {
   margin-top: 1rem;
   border: 3px solid var(--color-border);
   border-radius: var(--radius-lg);
-  padding: 28px 0.85rem 0.85rem;
+  padding: 36px 0.85rem 0.85rem;
   background: var(--color-surface);
   box-shadow: var(--shadow-sm);
   transition: border-color 0.4s, box-shadow 0.4s;
@@ -459,10 +459,10 @@ button, .btn {
 
 .sub-crown {
   position: absolute;
-  top: -30px;
+  top: -40px;
   left: 50%;
   transform: translateX(-50%);
-  width: 62px;
+  width: 80px;
   height: auto;
   fill: #d4c8a8;
   transition: fill 0.4s, filter 0.4s, transform 0.4s;
@@ -638,10 +638,10 @@ button, .btn {
 
 .brick-crown {
   position: absolute;
-  top: -17px;
+  top: -22px;
   left: 50%;
   transform: translateX(-50%);
-  width: 54%;
+  width: 68%;
   height: auto;
   fill: #d4c8a8;
   transition: fill 0.4s, filter 0.4s;
