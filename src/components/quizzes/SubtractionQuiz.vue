@@ -12,9 +12,10 @@
         class="sub-problem"
         :class="{ 'sub-problem--solved': isCorrect(i) }"
       >
-        <!-- left operand: blank or given -->
-        <div v-if="problem.blankPos === 'left'" class="sub-answer">
-          <span v-if="isCorrect(i)" class="sub-given">{{ problem.a }}</span>
+        <!-- col 1: left operand -->
+        <div class="sub-cell sub-cell--num">
+          <span v-if="problem.blankPos !== 'left'">{{ problem.a }}</span>
+          <span v-else-if="isCorrect(i)">{{ problem.a }}</span>
           <input
             v-else
             :ref="el => { if (el) inputRefs[i] = el }"
@@ -24,13 +25,14 @@
             @keypress="allowOnlyDigits"
           />
         </div>
-        <span v-else class="sub-term">{{ problem.a }}</span>
 
-        <span class="sub-op">−</span>
+        <!-- col 2: minus -->
+        <div class="sub-cell sub-cell--op">−</div>
 
-        <!-- right operand: blank or given -->
-        <div v-if="problem.blankPos === 'right'" class="sub-answer">
-          <span v-if="isCorrect(i)" class="sub-given">{{ problem.b }}</span>
+        <!-- col 3: right operand -->
+        <div class="sub-cell sub-cell--num">
+          <span v-if="problem.blankPos !== 'right'">{{ problem.b }}</span>
+          <span v-else-if="isCorrect(i)">{{ problem.b }}</span>
           <input
             v-else
             :ref="el => { if (el) inputRefs[i] = el }"
@@ -40,13 +42,14 @@
             @keypress="allowOnlyDigits"
           />
         </div>
-        <span v-else class="sub-term">{{ problem.b }}</span>
 
-        <span class="sub-op">=</span>
+        <!-- col 4: equals -->
+        <div class="sub-cell sub-cell--op">=</div>
 
-        <!-- answer: blank or given -->
-        <div v-if="problem.blankPos === 'answer'" class="sub-answer">
-          <span v-if="isCorrect(i)" class="sub-given">{{ problem.c }}</span>
+        <!-- col 5: result -->
+        <div class="sub-cell sub-cell--num">
+          <span v-if="problem.blankPos !== 'answer'">{{ problem.c }}</span>
+          <span v-else-if="isCorrect(i)">{{ problem.c }}</span>
           <input
             v-else
             :ref="el => { if (el) inputRefs[i] = el }"
@@ -56,11 +59,10 @@
             @keypress="allowOnlyDigits"
           />
         </div>
-        <span v-else class="sub-term">{{ problem.c }}</span>
       </div>
     </div>
 
-    <div v-if="isSolved" class="success">
+    <div v-if="isSolved" class="success" style="text-align:center">
       🎉 Gut gemacht!
     </div>
 

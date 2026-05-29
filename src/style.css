@@ -260,17 +260,19 @@ button, .btn {
 .sub-problems {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.5rem;
 }
 
+/* 5-column grid: num | op | num | op | num
+   num columns are equal width; op columns are narrow and fixed */
 .sub-problem {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1.8rem 1fr 1.8rem 1fr;
   align-items: center;
-  gap: 0.5rem;
   background: #fff;
   border: 2px solid #dee2e6;
   border-radius: 10px;
-  padding: 0.6rem 1rem;
+  padding: 0.55rem 0.9rem;
   font-size: 1.25rem;
   font-weight: 700;
   transition: border-color 0.2s, background 0.2s;
@@ -282,29 +284,21 @@ button, .btn {
   color: #2f9e44;
 }
 
-.sub-term {
-  min-width: 2.5rem;
-  text-align: center;
-}
-
-.sub-op {
-  color: #6c757d;
-  font-weight: 600;
-}
-
-.sub-answer {
-  min-width: 3.5rem;
+.sub-cell {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.sub-given {
-  text-align: center;
+.sub-cell--op {
+  color: #6c757d;
+  font-weight: 600;
+  font-size: 1.1rem;
 }
 
-.sub-answer input {
-  width: 3.5rem;
+.sub-cell--num input {
+  width: 100%;
+  max-width: 4rem;
   height: 2.4rem;
   border: 2px solid #ced4da;
   border-radius: 8px;
@@ -318,7 +312,7 @@ button, .btn {
   transition: border-color 0.15s;
 }
 
-.sub-answer input:focus {
+.sub-cell--num input:focus {
   border-color: #4c6ef5;
 }
 
@@ -392,6 +386,7 @@ button, .btn {
   font-size: 1.4rem;
   font-weight: 700;
   color: #2f9e44;
+  text-align: center;
   animation: pop 0.4s ease-out;
 }
 
