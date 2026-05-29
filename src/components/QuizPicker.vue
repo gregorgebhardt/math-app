@@ -147,7 +147,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { quizzes, hardnessLevels } from '../quizzes.js'
 
 const props = defineProps({
@@ -156,13 +156,21 @@ const props = defineProps({
 
 const emit = defineEmits(['start'])
 
+const STORAGE_KEY = 'math-app-settings'
+
+function loadSettings() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}') } catch { return {} }
+}
+
+const saved = loadSettings()
+
 const selectedKey = ref(null)
-const hardness = ref(2)
+const hardness = ref(saved.hardness ?? 2)
 
 // Pyramid options
-const selectedRows = ref(3)
-const selectedPyramidMaxVal = ref(10)
-const prefillEnabled = ref(false)
+const selectedRows = ref(saved.selectedRows ?? 3)
+const selectedPyramidMaxVal = ref(saved.selectedPyramidMaxVal ?? 10)
+const prefillEnabled = ref(saved.prefillEnabled ?? false)
 
 const pyramidRangeOptions = [
   { label: '1–10', value: 10 },
@@ -172,9 +180,9 @@ const pyramidRangeOptions = [
 ]
 
 // Subtraction options
-const selectedCount = ref(5)
-const selectedSubMaxVal = ref(20)
-const resultOnly = ref(true)
+const selectedCount = ref(saved.selectedCount ?? 5)
+const selectedSubMaxVal = ref(saved.selectedSubMaxVal ?? 20)
+const resultOnly = ref(saved.resultOnly ?? true)
 
 const subRangeOptions = [
   { label: '1–10', value: 10 },
@@ -183,19 +191,42 @@ const subRangeOptions = [
   { label: '1–100', value: 100 }
 ]
 
+// Slider → advanced settings sync
+watch(hardness, (level) => {
+  const p = quizzes.pyramid.hardnessPresets[level - 1]
+  selectedRows.value = p.rows
+  selectedPyramidMaxVal.value = p.maxVal
+  prefillEnabled.value = p.prefill
+
+  const s = quizzes.subtraction.hardnessPresets[level - 1]
+  selectedCount.value = s.count
+  selectedSubMaxVal.value = s.maxVal
+  resultOnly.value = s.resultOnly
+})
+
+// Persist all settings on any change
+watch(
+  [hardness, selectedRows, selectedPyramidMaxVal, prefillEnabled, selectedCount, selectedSubMaxVal, resultOnly],
+  () => localStorage.setItem(STORAGE_KEY, JSON.stringify({
+    hardness: hardness.value,
+    selectedRows: selectedRows.value,
+    selectedPyramidMaxVal: selectedPyramidMaxVal.value,
+    prefillEnabled: prefillEnabled.value,
+    selectedCount: selectedCount.value,
+    selectedSubMaxVal: selectedSubMaxVal.value,
+    resultOnly: resultOnly.value,
+  }))
+)
+
+// start() always reads from advanced refs (slider syncs them)
 function start() {
   if (!selectedKey.value) return
   let options = {}
-  const quiz = quizzes[selectedKey.value]
-
-  if (props.simpleMode) {
-    options = { ...quiz.hardnessPresets[hardness.value - 1] }
-  } else if (selectedKey.value === 'pyramid') {
+  if (selectedKey.value === 'pyramid') {
     options = { rows: selectedRows.value, maxVal: selectedPyramidMaxVal.value, prefill: prefillEnabled.value }
   } else if (selectedKey.value === 'subtraction') {
     options = { count: selectedCount.value, maxVal: selectedSubMaxVal.value, resultOnly: resultOnly.value }
   }
-
   emit('start', { quizKey: selectedKey.value, options })
 }
 </script>

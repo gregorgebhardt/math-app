@@ -21,12 +21,13 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { quizzes } from './quizzes.js'
 import QuizPicker from './components/QuizPicker.vue'
 
 const activeQuiz = ref(null)
-const simpleMode = ref(true)
+const simpleMode = ref(localStorage.getItem('math-app-simpleMode') !== 'false')
+watch(simpleMode, val => localStorage.setItem('math-app-simpleMode', val))
 
 function onStart({ quizKey, options }) {
   const quiz = quizzes[quizKey]
