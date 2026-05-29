@@ -262,7 +262,7 @@ button, .btn {
 
 .sub-problems-wrapper {
   position: relative;
-  padding-top: 22px; /* room for crown */
+  margin-top: 1rem;
   border: 2px solid #dee2e6;
   border-radius: 14px;
   padding: 22px 0.75rem 0.75rem;
