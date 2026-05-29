@@ -245,7 +245,7 @@ button, .btn {
 }
 .quiz-card:nth-child(2n) .quiz-card-icon { color: var(--color-coral); }
 .quiz-card:nth-child(3n) .quiz-card-icon { color: var(--color-purple); }
-.quiz-card--selected .quiz-card-icon { color: var(--color-amber); }
+.quiz-card.quiz-card--selected .quiz-card-icon { color: var(--color-amber); }
 
 .quiz-card-title {
   font-family: 'Fredoka', system-ui, sans-serif;

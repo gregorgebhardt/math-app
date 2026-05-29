@@ -6,16 +6,14 @@
     </div>
 
     <div class="sub-problems-wrapper" :class="{ 'sub-problems-wrapper--solved': isSolved }">
-      <svg class="sub-crown" viewBox="0 0 80 40" xmlns="http://www.w3.org/2000/svg">
-        <rect x="0" y="28" width="80" height="12" rx="4"/>
-        <polygon points="0,40 0,18 14,30 30,8 40,0 50,8 66,30 80,18 80,40"/>
-        <circle cx="40" cy="0"  r="4.5" fill="white" opacity="0.9"/>
-        <circle cx="30" cy="8"  r="3.2" fill="white" opacity="0.9"/>
-        <circle cx="50" cy="8"  r="3.2" fill="white" opacity="0.9"/>
-        <circle cx="0"  cy="18" r="2.8" fill="white" opacity="0.9"/>
-        <circle cx="80" cy="18" r="2.8" fill="white" opacity="0.9"/>
-        <circle cx="14" cy="30" r="2"   fill="white" opacity="0.7"/>
-        <circle cx="66" cy="30" r="2"   fill="white" opacity="0.7"/>
+      <svg class="sub-crown" viewBox="0 0 80 38" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="22" width="80" height="16" rx="4"/>
+        <polygon points="0,38 0,22 8,0 16,22 24,0 32,22 40,0 48,22 56,0 64,22 72,0 80,22 80,38"/>
+        <circle cx="8"  cy="0" r="4" fill="white" opacity="0.9"/>
+        <circle cx="24" cy="0" r="4" fill="white" opacity="0.9"/>
+        <circle cx="40" cy="0" r="4" fill="white" opacity="0.9"/>
+        <circle cx="56" cy="0" r="4" fill="white" opacity="0.9"/>
+        <circle cx="72" cy="0" r="4" fill="white" opacity="0.9"/>
       </svg>
 
     <div class="sub-problems">
