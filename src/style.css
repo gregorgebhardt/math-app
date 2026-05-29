@@ -45,6 +45,13 @@ body {
   padding-right: max(1rem, env(safe-area-inset-right));
   padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
   position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.quiz-picker {
+  flex: 1;
 }
 
 .app::before,
