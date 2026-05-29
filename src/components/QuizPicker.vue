@@ -89,6 +89,26 @@
                 >{{ opt.label }}</button>
               </div>
             </label>
+
+            <label class="option-label">
+              Fehlende Zahl?
+              <div class="toggle-row">
+                <button
+                  class="toggle-btn"
+                  :class="{ 'toggle-btn--active': resultOnly }"
+                  @click.stop="resultOnly = true"
+                >
+                  Ergebnis
+                </button>
+                <button
+                  class="toggle-btn"
+                  :class="{ 'toggle-btn--active': !resultOnly }"
+                  @click.stop="resultOnly = false"
+                >
+                  Beliebig
+                </button>
+              </div>
+            </label>
           </template>
 
           <button class="btn btn--primary btn--large" @click.stop="start">
@@ -123,6 +143,7 @@ const pyramidRangeOptions = [
 // Subtraction options
 const selectedCount = ref(5)
 const selectedSubMaxVal = ref(20)
+const resultOnly = ref(true)
 
 const subRangeOptions = [
   { label: '1–10', value: 10 },
@@ -137,7 +158,7 @@ function start() {
   if (selectedKey.value === 'pyramid') {
     options = { rows: selectedRows.value, maxVal: selectedPyramidMaxVal.value, prefill: prefillEnabled.value }
   } else if (selectedKey.value === 'subtraction') {
-    options = { count: selectedCount.value, maxVal: selectedSubMaxVal.value }
+    options = { count: selectedCount.value, maxVal: selectedSubMaxVal.value, resultOnly: resultOnly.value }
   }
   emit('start', { quizKey: selectedKey.value, options })
 }
