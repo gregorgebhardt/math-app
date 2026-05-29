@@ -1,9 +1,9 @@
 <template>
-  <div class="quiz-picker">
+  <div class="quiz-picker" @click="selectedKey = null">
     <h1 class="app-title">Mathe Übungen</h1>
     <p class="app-subtitle">Wähle eine Aufgabe:</p>
 
-    <div class="quiz-cards" @click="selectedKey = null">
+    <div class="quiz-cards">
       <div
         v-for="(quiz, key) in quizzes"
         :key="key"
