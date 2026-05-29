@@ -6,11 +6,16 @@
     </div>
 
     <div class="sub-problems-wrapper" :class="{ 'sub-problems-wrapper--solved': isSolved }">
-      <svg class="sub-crown" viewBox="0 0 80 36" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="0,36 0,10 20,26 40,0 60,26 80,10 80,36"/>
-        <circle cx="0"  cy="10" r="5"/>
-        <circle cx="40" cy="0"  r="5"/>
-        <circle cx="80" cy="10" r="5"/>
+      <svg class="sub-crown" viewBox="0 0 80 38" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="26" width="80" height="12" rx="4"/>
+        <polygon points="0,38 0,16 16,24 30,7 40,0 50,7 64,24 80,16 80,38"/>
+        <circle cx="40" cy="0"  r="4.5"/>
+        <circle cx="30" cy="7"  r="3.5"/>
+        <circle cx="50" cy="7"  r="3.5"/>
+        <circle cx="0"  cy="16" r="3"/>
+        <circle cx="80" cy="16" r="3"/>
+        <circle cx="16" cy="24" r="2" opacity="0.65"/>
+        <circle cx="64" cy="24" r="2" opacity="0.65"/>
       </svg>
 
     <div class="sub-problems">
