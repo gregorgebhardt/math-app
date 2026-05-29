@@ -1,17 +1,18 @@
 <template>
   <svg :width="size" :height="size" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <!-- top brick -->
-    <rect x="24" y="4" width="32" height="22" rx="5" fill="currentColor" opacity="1"/>
-    <!-- middle row -->
-    <rect x="8"  y="30" width="28" height="20" rx="5" fill="currentColor" opacity="0.75"/>
-    <rect x="44" y="30" width="28" height="20" rx="5" fill="currentColor" opacity="0.75"/>
-    <!-- bottom row -->
-    <rect x="0"  y="54" width="22" height="22" rx="5" fill="currentColor" opacity="0.5"/>
-    <rect x="29" y="54" width="22" height="22" rx="5" fill="currentColor" opacity="0.5"/>
-    <rect x="58" y="54" width="22" height="22" rx="5" fill="currentColor" opacity="0.5"/>
-    <!-- + signs between bottom row -->
-    <text x="25.5" y="69" font-family="system-ui" font-size="10" font-weight="900" fill="currentColor" opacity="0.9" text-anchor="middle">+</text>
-    <text x="54.5" y="69" font-family="system-ui" font-size="10" font-weight="900" fill="currentColor" opacity="0.9" text-anchor="middle">+</text>
+    <!-- all bricks 20×18, rows widen toward base -->
+    <!-- top: 1 brick, 20px wide, centered -->
+    <rect x="30" y="2"  width="20" height="18" rx="5" fill="currentColor"/>
+    <!-- middle: 2 bricks, spanning 60px total -->
+    <rect x="15" y="26" width="20" height="18" rx="5" fill="currentColor" opacity="0.7"/>
+    <rect x="45" y="26" width="20" height="18" rx="5" fill="currentColor" opacity="0.7"/>
+    <!-- bottom: 3 bricks, spanning 80px total -->
+    <rect x="0"  y="50" width="20" height="18" rx="5" fill="currentColor" opacity="0.42"/>
+    <rect x="30" y="50" width="20" height="18" rx="5" fill="currentColor" opacity="0.42"/>
+    <rect x="60" y="50" width="20" height="18" rx="5" fill="currentColor" opacity="0.42"/>
+    <!-- + between bottom bricks -->
+    <text x="25" y="63" font-family="system-ui" font-size="11" font-weight="900" fill="currentColor" opacity="0.95" text-anchor="middle">+</text>
+    <text x="55" y="63" font-family="system-ui" font-size="11" font-weight="900" fill="currentColor" opacity="0.95" text-anchor="middle">+</text>
   </svg>
 </template>
 
