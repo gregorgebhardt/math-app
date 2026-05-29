@@ -16,6 +16,6 @@ export const quizzes = {
     icon: IconSubtraction,
     description: 'Finde die fehlende Zahl in jeder Subtraktionsaufgabe.',
     component: SubtractionQuiz,
-    defaultOptions: { count: 5, maxVal: 20 }
+    defaultOptions: { count: 5, maxVal: 20, resultOnly: true }
   }
 }
