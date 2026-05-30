@@ -86,8 +86,8 @@
               </label>
             </template>
 
-            <!-- Subtraction options -->
-            <template v-else-if="key === 'subtraction'">
+            <!-- Addition / Subtraction options (identical controls) -->
+            <template v-else-if="key === 'addition' || key === 'subtraction'">
               <label class="option-label">
                 Wie viele Aufgaben?
                 <div class="row-selector">
@@ -169,6 +169,7 @@ const selectedKey = ref(null)
 // Per-quiz hardness levels (slider position stored independently per quiz)
 const hardness = ref({
   pyramid:     saved.hardness?.pyramid     ?? 2,
+  addition:    saved.hardness?.addition    ?? 2,
   subtraction: saved.hardness?.subtraction ?? 2,
 })
 
@@ -204,8 +205,8 @@ function setHardness(key, level) {
     selectedRows.value = p.rows
     selectedPyramidMaxVal.value = p.maxVal
     prefillEnabled.value = p.prefill
-  } else if (key === 'subtraction') {
-    const s = quizzes.subtraction.hardnessPresets[level - 1]
+  } else if (key === 'addition' || key === 'subtraction') {
+    const s = quizzes[key].hardnessPresets[level - 1]
     selectedCount.value = s.count
     selectedSubMaxVal.value = s.maxVal
     resultOnly.value = s.resultOnly
@@ -233,7 +234,7 @@ function start() {
   let options = {}
   if (selectedKey.value === 'pyramid') {
     options = { rows: selectedRows.value, maxVal: selectedPyramidMaxVal.value, prefill: prefillEnabled.value }
-  } else if (selectedKey.value === 'subtraction') {
+  } else if (selectedKey.value === 'addition' || selectedKey.value === 'subtraction') {
     options = { count: selectedCount.value, maxVal: selectedSubMaxVal.value, resultOnly: resultOnly.value }
   }
   emit('start', { quizKey: selectedKey.value, options })
