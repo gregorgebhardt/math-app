@@ -78,13 +78,11 @@
             />
           </div>
 
-          <!-- 24h row: [h12 w/ Vm./Nm. label] : [mm] : [h24 w/ 24h label] -->
-          <div v-else class="clock-input-row">
-            <div class="clock-hour-col">
-              <span
-                class="clock-hour-label"
-                :class="problem.ampm === 'am' ? 'clock-hour-label--am' : 'clock-hour-label--pm'"
-              >{{ problem.ampm === 'am' ? 'Vm.' : 'Nm.' }}</span>
+          <!-- 24h grid: Vormittag/Nachmittag labels with minute spanning both rows -->
+          <div v-else class="clock-24h-grid">
+            <span class="cgrid-vm-label clock-24h-label clock-24h-label--vm">Vormittag:</span>
+
+            <div class="cgrid-h12">
               <span v-if="isCorrect(i)" class="clock-answer">{{ problem.hour }}</span>
               <input
                 v-else
@@ -95,20 +93,25 @@
                 @keypress="allowOnlyDigits"
               />
             </div>
-            <span class="clock-sep clock-sep--bottom">:</span>
-            <span v-if="isCorrect(i)" class="clock-answer">{{ String(problem.minute).padStart(2, '0') }}</span>
-            <input
-              v-else
-              :ref="el => { if (el) minuteRefs[i] = el }"
-              type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2"
-              :value="userMinutes[i]"
-              :placeholder="props.step === 60 ? '00' : ''"
-              @input="onMinuteInput(i, $event)"
-              @keypress="allowOnlyDigits"
-            />
-            <span class="clock-sep clock-sep--bottom">:</span>
-            <div class="clock-hour-col">
-              <span class="clock-hour-label clock-hour-label--24h">24h</span>
+
+            <!-- minute: spans both rows, vertically centred -->
+            <div class="cgrid-minute">
+              <span class="clock-sep">:</span>
+              <span v-if="isCorrect(i)" class="clock-answer">{{ String(problem.minute).padStart(2, '0') }}</span>
+              <input
+                v-else
+                :ref="el => { if (el) minuteRefs[i] = el }"
+                type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2"
+                :value="userMinutes[i]"
+                :placeholder="props.step === 60 ? '00' : ''"
+                @input="onMinuteInput(i, $event)"
+                @keypress="allowOnlyDigits"
+              />
+            </div>
+
+            <span class="cgrid-nm-label clock-24h-label clock-24h-label--nm">Nachmittag:</span>
+
+            <div class="cgrid-h24">
               <span v-if="isCorrect(i)" class="clock-answer">{{ problem.hour24 }}</span>
               <input
                 v-else
