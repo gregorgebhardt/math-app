@@ -72,7 +72,7 @@
               :ref="el => { if (el) minuteRefs[i] = el }"
               type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2"
               :value="userMinutes[i]"
-              :placeholder="props.step === 60 ? '00' : ''"
+              placeholder="00"
               @input="onMinuteInput(i, $event)"
               @keypress="allowOnlyDigits"
             />
@@ -103,7 +103,7 @@
                 :ref="el => { if (el) minuteRefs[i] = el }"
                 type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2"
                 :value="userMinutes[i]"
-                :placeholder="props.step === 60 ? '00' : ''"
+                placeholder="00"
                 @input="onMinuteInput(i, $event)"
                 @keypress="allowOnlyDigits"
               />
@@ -191,9 +191,7 @@ function initRound() {
 function newRound() { initRound() }
 
 function minuteMatches(entered, expected) {
-  return expected === 0
-    ? (entered === '' || Number(entered) === 0)
-    : Number(entered) === expected
+  return entered.length === 2 && Number(entered) === expected
 }
 
 function isCorrect(i) {
