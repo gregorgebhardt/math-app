@@ -37,11 +37,11 @@ export const quizzes = {
     component: ClockQuiz,
     defaultOptions: { count: 5, step: 60 },
     hardnessPresets: [
-      { count: 3, step: 60 },
-      { count: 4, step: 30 },
-      { count: 5, step: 15 },
-      { count: 5, step: 5  },
-      { count: 6, step: 5  },
+      { count: 3, step: 60, twentyFourHour: false, showNumbers: true  },
+      { count: 4, step: 30, twentyFourHour: true,  showNumbers: true  },
+      { count: 5, step: 15, twentyFourHour: true,  showNumbers: true  },
+      { count: 5, step: 5,  twentyFourHour: true,  showNumbers: true  },
+      { count: 6, step: 5,  twentyFourHour: true,  showNumbers: false },
     ]
   },
   addition: {

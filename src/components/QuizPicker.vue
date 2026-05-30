@@ -69,6 +69,36 @@
                   >{{ opt.label }}</button>
                 </div>
               </label>
+              <label class="option-label">
+                Zeitformat?
+                <div class="toggle-row">
+                  <button
+                    class="toggle-btn toggle-btn--wide"
+                    :class="{ 'toggle-btn--active': !clockTwentyFourHour }"
+                    @click.stop="clockTwentyFourHour = false"
+                  >12h</button>
+                  <button
+                    class="toggle-btn toggle-btn--wide"
+                    :class="{ 'toggle-btn--active': clockTwentyFourHour }"
+                    @click.stop="clockTwentyFourHour = true"
+                  >24h</button>
+                </div>
+              </label>
+              <label class="option-label">
+                Ziffern?
+                <div class="toggle-row">
+                  <button
+                    class="toggle-btn toggle-btn--wide"
+                    :class="{ 'toggle-btn--active': clockShowNumbers }"
+                    @click.stop="clockShowNumbers = true"
+                  >Zahlen</button>
+                  <button
+                    class="toggle-btn toggle-btn--wide"
+                    :class="{ 'toggle-btn--active': !clockShowNumbers }"
+                    @click.stop="clockShowNumbers = false"
+                  >Striche</button>
+                </div>
+              </label>
             </template>
 
             <!-- Pyramid options -->
@@ -165,40 +195,6 @@
 
           </template>
 
-          <!-- Clock-specific toggles (always shown when clock is selected) -->
-          <template v-if="key === 'clock'">
-            <label class="option-label">
-              Zeitformat?
-              <div class="toggle-row">
-                <button
-                  class="toggle-btn toggle-btn--wide"
-                  :class="{ 'toggle-btn--active': !clockTwentyFourHour }"
-                  @click.stop="clockTwentyFourHour = false"
-                >12h</button>
-                <button
-                  class="toggle-btn toggle-btn--wide"
-                  :class="{ 'toggle-btn--active': clockTwentyFourHour }"
-                  @click.stop="clockTwentyFourHour = true"
-                >24h</button>
-              </div>
-            </label>
-            <label class="option-label">
-              Ziffern?
-              <div class="toggle-row">
-                <button
-                  class="toggle-btn toggle-btn--wide"
-                  :class="{ 'toggle-btn--active': clockShowNumbers }"
-                  @click.stop="clockShowNumbers = true"
-                >Zahlen</button>
-                <button
-                  class="toggle-btn toggle-btn--wide"
-                  :class="{ 'toggle-btn--active': !clockShowNumbers }"
-                  @click.stop="clockShowNumbers = false"
-                >Striche</button>
-              </div>
-            </label>
-          </template>
-
           <button class="btn btn--primary btn--large" @click.stop="start">
             Starten
           </button>
@@ -251,7 +247,7 @@ const pyramidRangeOptions = [
 // Clock options
 const selectedClockCount  = ref(saved.selectedClockCount  ?? 5)
 const selectedStep        = ref(saved.selectedStep        ?? 60)
-const clockTwentyFourHour = ref(saved.clockTwentyFourHour ?? false)
+const clockTwentyFourHour = ref(saved.clockTwentyFourHour ?? true)
 const clockShowNumbers    = ref(saved.clockShowNumbers    ?? true)
 
 const stepOptions = [
@@ -283,8 +279,10 @@ function setHardness(key, level) {
     prefillEnabled.value = p.prefill
   } else if (key === 'clock') {
     const c = quizzes.clock.hardnessPresets[level - 1]
-    selectedClockCount.value = c.count
-    selectedStep.value = c.step
+    selectedClockCount.value  = c.count
+    selectedStep.value        = c.step
+    clockTwentyFourHour.value = c.twentyFourHour
+    clockShowNumbers.value    = c.showNumbers
   } else if (key === 'addition' || key === 'subtraction') {
     const s = quizzes[key].hardnessPresets[level - 1]
     selectedCount.value = s.count
