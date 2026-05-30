@@ -697,6 +697,13 @@ button, .btn {
   gap: 0.25rem;
 }
 
+.clock-input-row--timed {
+  display: grid;
+  grid-template-columns: 2.8rem min-content 2.8rem;
+  column-gap: 0.15rem;
+  align-items: center;
+}
+
 /* 24h grid: labels | hours | minute-spanning-both-rows */
 .clock-24h-grid {
   display: grid;

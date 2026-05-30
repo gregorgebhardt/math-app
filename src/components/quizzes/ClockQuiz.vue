@@ -60,7 +60,7 @@
           >{{ problem.isAfternoon ? 'Nachmittag' : 'Vormittag' }}</div>
 
           <!-- Simple row: Leicht (hour + Uhr) or Mittel/Schwer/Profi (hour : minute) -->
-          <div v-if="!props.twentyFourHour" class="clock-input-row">
+          <div v-if="!props.twentyFourHour" class="clock-input-row" :class="{ 'clock-input-row--timed': props.showMinute }">
             <span v-if="isCorrect(i)" class="clock-answer">{{ props.amPmHint ? problem.hour24 : problem.hour }}</span>
             <input
               v-else
@@ -78,7 +78,6 @@
                 :ref="el => { if (el) minuteRefs[i] = el }"
                 type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2"
                 :value="userMinutes[i]"
-                placeholder="00"
                 @input="onMinuteInput(i, $event)"
                 @keypress="allowOnlyDigits"
               />
@@ -112,7 +111,6 @@
                   :ref="el => { if (el) minuteRefs[i] = el }"
                   type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2"
                   :value="userMinutes[i]"
-                  placeholder="00"
                   @input="onMinuteInput(i, $event)"
                   @keypress="allowOnlyDigits"
                 />
