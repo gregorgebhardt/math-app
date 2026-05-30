@@ -165,6 +165,40 @@
 
           </template>
 
+          <!-- Clock-specific toggles (always shown when clock is selected) -->
+          <template v-if="key === 'clock'">
+            <label class="option-label">
+              Zeitformat?
+              <div class="toggle-row">
+                <button
+                  class="toggle-btn toggle-btn--wide"
+                  :class="{ 'toggle-btn--active': !clockTwentyFourHour }"
+                  @click.stop="clockTwentyFourHour = false"
+                >12h</button>
+                <button
+                  class="toggle-btn toggle-btn--wide"
+                  :class="{ 'toggle-btn--active': clockTwentyFourHour }"
+                  @click.stop="clockTwentyFourHour = true"
+                >24h</button>
+              </div>
+            </label>
+            <label class="option-label">
+              Ziffern?
+              <div class="toggle-row">
+                <button
+                  class="toggle-btn toggle-btn--wide"
+                  :class="{ 'toggle-btn--active': clockShowNumbers }"
+                  @click.stop="clockShowNumbers = true"
+                >Zahlen</button>
+                <button
+                  class="toggle-btn toggle-btn--wide"
+                  :class="{ 'toggle-btn--active': !clockShowNumbers }"
+                  @click.stop="clockShowNumbers = false"
+                >Striche</button>
+              </div>
+            </label>
+          </template>
+
           <button class="btn btn--primary btn--large" @click.stop="start">
             Starten
           </button>
@@ -215,8 +249,10 @@ const pyramidRangeOptions = [
 ]
 
 // Clock options
-const selectedClockCount = ref(saved.selectedClockCount ?? 5)
-const selectedStep = ref(saved.selectedStep ?? 60)
+const selectedClockCount  = ref(saved.selectedClockCount  ?? 5)
+const selectedStep        = ref(saved.selectedStep        ?? 60)
+const clockTwentyFourHour = ref(saved.clockTwentyFourHour ?? false)
+const clockShowNumbers    = ref(saved.clockShowNumbers    ?? true)
 
 const stepOptions = [
   { label: 'Stunden',  value: 60 },
@@ -259,11 +295,14 @@ function setHardness(key, level) {
 
 // Persist all settings on any change
 watch(
-  [hardness, selectedClockCount, selectedStep, selectedRows, selectedPyramidMaxVal, prefillEnabled, selectedCount, selectedSubMaxVal, resultOnly],
+  [hardness, selectedClockCount, selectedStep, clockTwentyFourHour, clockShowNumbers,
+   selectedRows, selectedPyramidMaxVal, prefillEnabled, selectedCount, selectedSubMaxVal, resultOnly],
   () => localStorage.setItem(STORAGE_KEY, JSON.stringify({
     hardness: hardness.value,
     selectedClockCount: selectedClockCount.value,
     selectedStep: selectedStep.value,
+    clockTwentyFourHour: clockTwentyFourHour.value,
+    clockShowNumbers: clockShowNumbers.value,
     selectedRows: selectedRows.value,
     selectedPyramidMaxVal: selectedPyramidMaxVal.value,
     prefillEnabled: prefillEnabled.value,
@@ -281,7 +320,7 @@ function start() {
   if (selectedKey.value === 'pyramid') {
     options = { rows: selectedRows.value, maxVal: selectedPyramidMaxVal.value, prefill: prefillEnabled.value }
   } else if (selectedKey.value === 'clock') {
-    options = { count: selectedClockCount.value, step: selectedStep.value }
+    options = { count: selectedClockCount.value, step: selectedStep.value, twentyFourHour: clockTwentyFourHour.value, showNumbers: clockShowNumbers.value }
   } else if (selectedKey.value === 'addition' || selectedKey.value === 'subtraction') {
     options = { count: selectedCount.value, maxVal: selectedSubMaxVal.value, resultOnly: resultOnly.value }
   }
