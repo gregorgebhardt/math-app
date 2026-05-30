@@ -178,17 +178,19 @@ function generateProblem() {
     : 0
 
   if (!props.twentyFourHour) {
-    const hour = Math.floor(Math.random() * 12) + 1
     if (props.amPmHint) {
       const isAfternoon = Math.random() < 0.5
+      // AM: 1-11 (skip midnight 12 AM = 00:00, confusing for kids)
+      // PM: 1-11 (skip noon where clock=12 would be ambiguous with midnight)
+      const hour = Math.floor(Math.random() * 11) + 1
       return { hour, minute, isAfternoon }
     }
-    return { hour, minute }
+    return { hour: Math.floor(Math.random() * 12) + 1, minute }
   }
 
-  // 24h mode (Einfach): always PM so Nachmittag = hour + 12, unambiguous
-  const hour = Math.floor(Math.random() * 12) + 1
-  const hour24 = hour === 12 ? 12 : hour + 12
+  // 24h mode (Einfach): always PM, 1-11 so hour ≠ hour24 (skip noon where both = 12)
+  const hour = Math.floor(Math.random() * 11) + 1
+  const hour24 = hour + 12   // 13-23
   return { hour, minute, hour24 }
 }
 
