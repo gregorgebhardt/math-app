@@ -183,10 +183,8 @@ function generateProblem() {
   if (!props.twentyFourHour) {
     if (props.amPmHint) {
       const isAfternoon = Math.random() < 0.5
-      // 1-11 avoids midnight (12 AM) and noon (12 PM) edge cases
-      const hour = Math.floor(Math.random() * 11) + 1
-      const hour24 = isAfternoon ? hour + 12 : hour
-      return { hour, minute, isAfternoon, hour24 }
+      const hour = Math.floor(Math.random() * 11) + 1   // 1-11: avoids midnight and noon
+      return { hour, minute, isAfternoon }
     }
     return { hour: Math.floor(Math.random() * 12) + 1, minute }
   }
@@ -201,7 +199,14 @@ function initRound() {
   hourRefs.value    = []
   minuteRefs.value  = []
   hourRefs24h.value = []
-  problems.value    = Array.from({ length: props.count }, generateProblem)
+  const used = new Set()
+  problems.value = Array.from({ length: props.count }, () => {
+    let p, key, attempts = 0
+    do { p = generateProblem(); key = `${p.hour}:${p.minute}`; attempts++ }
+    while (used.has(key) && attempts < 100)
+    used.add(key)
+    return p
+  })
   userHours.value    = problems.value.map(() => '')
   userMinutes.value  = problems.value.map(() => '')
   user24hHours.value = problems.value.map(() => '')
@@ -212,13 +217,12 @@ function newRound() { initRound() }
 
 function isCorrect(i) {
   return clockIsCorrect({
-    userHour:   userHours.value[i],
-    userMinute: userMinutes.value[i],
-    userHour24: user24hHours.value[i],
-    problem:    problems.value[i],
+    userHour:      userHours.value[i],
+    userMinute:    userMinutes.value[i],
+    userHour24:    user24hHours.value[i],
+    problem:       problems.value[i],
     showMinute:    props.showMinute,
     twentyFourHour: props.twentyFourHour,
-    amPmHint:   props.amPmHint,
   })
 }
 
@@ -226,8 +230,7 @@ function onHourInput(i, event) {
   const raw = event.target.value.replace(/\D/g, '')
   userHours.value[i] = raw
   const p = problems.value[i]
-  const target = props.amPmHint ? p.hour24 : p.hour
-  if (raw !== '' && Number(raw) === target) {
+  if (raw !== '' && Number(raw) === p.hour) {
     if (props.showMinute) {
       nextTick(() => minuteRefs.value[i]?.focus())
     } else if (props.twentyFourHour) {

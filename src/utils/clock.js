@@ -3,11 +3,10 @@ export function minuteMatches(entered, expected) {
   return Number(entered.padStart(2, '0')) === expected
 }
 
-// targetHour: 12h for Leicht/Einfach; 24h for Mittel+ (amPmHint)
-export function clockIsCorrect({ userHour, userMinute, userHour24, problem, showMinute, twentyFourHour, amPmHint }) {
+// amPmHint is display-only; validation always checks the 12h clock reading (problem.hour)
+export function clockIsCorrect({ userHour, userMinute, userHour24, problem, showMinute, twentyFourHour }) {
   if (!problem) return false
-  const targetHour = amPmHint ? problem.hour24 : problem.hour
-  const hourOk   = userHour !== '' && Number(userHour) === targetHour
+  const hourOk   = userHour !== '' && Number(userHour) === problem.hour
   const minuteOk = !showMinute || minuteMatches(userMinute, problem.minute)
   if (!twentyFourHour) return hourOk && minuteOk
   const hour24Ok = (userHour24 ?? '') !== '' && Number(userHour24) === problem.hour24
