@@ -168,13 +168,10 @@ function generateProblem() {
     return { hour: Math.floor(Math.random() * 12) + 1, minute }
   }
 
-  const isAfternoon = Math.random() < 0.5
-  const hour = isAfternoon
-    ? Math.floor(Math.random() * 12) + 1   // 1–12
-    : Math.floor(Math.random() * 11) + 1   // 1–11 (avoid midnight)
-  const ampm = isAfternoon ? 'pm' : 'am'
-  const hour24 = ampm === 'am' ? hour : (hour === 12 ? 12 : hour + 12)
-  return { hour, minute, ampm, hour24 }
+  // Always generate a PM time so hour24 is always unambiguous (no AM/PM guess from clock face)
+  const hour = Math.floor(Math.random() * 12) + 1   // 1–12
+  const hour24 = hour === 12 ? 12 : hour + 12        // noon stays 12; 1–11 → 13–23
+  return { hour, minute, hour24 }
 }
 
 function initRound() {
