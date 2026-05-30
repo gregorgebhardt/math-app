@@ -1,9 +1,11 @@
 import PyramidQuiz from './components/quizzes/PyramidQuiz.vue'
 import SubtractionQuiz from './components/quizzes/SubtractionQuiz.vue'
 import AdditionQuiz from './components/quizzes/AdditionQuiz.vue'
+import ClockQuiz from './components/quizzes/ClockQuiz.vue'
 import IconPyramid from './components/icons/IconPyramid.vue'
 import IconSubtraction from './components/icons/IconSubtraction.vue'
 import IconAddition from './components/icons/IconAddition.vue'
+import IconClock from './components/icons/IconClock.vue'
 
 export const hardnessLevels = [
   { label: 'Leicht',   emoji: '🌱' },
@@ -26,6 +28,20 @@ export const quizzes = {
       { rows: 3, maxVal: 20, prefill: true  },
       { rows: 4, maxVal: 20, prefill: false },
       { rows: 5, maxVal: 50, prefill: false },
+    ]
+  },
+  clock: {
+    label: 'Uhrzeiten',
+    icon: IconClock,
+    description: 'Lies die Uhrzeit ab und tippe sie ein.',
+    component: ClockQuiz,
+    defaultOptions: { count: 5, step: 60 },
+    hardnessPresets: [
+      { count: 3, step: 60 },
+      { count: 4, step: 30 },
+      { count: 5, step: 15 },
+      { count: 5, step: 5  },
+      { count: 6, step: 5  },
     ]
   },
   addition: {

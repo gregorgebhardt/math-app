@@ -43,8 +43,36 @@
           <!-- Advanced mode: per-quiz controls -->
           <template v-else>
 
+            <!-- Clock options -->
+            <template v-if="key === 'clock'">
+              <label class="option-label">
+                Wie viele Uhrzeiten?
+                <div class="row-selector">
+                  <button
+                    v-for="n in [3, 4, 5, 6]"
+                    :key="n"
+                    class="row-btn"
+                    :class="{ 'row-btn--active': selectedClockCount === n }"
+                    @click.stop="selectedClockCount = n"
+                  >{{ n }}</button>
+                </div>
+              </label>
+              <label class="option-label">
+                Genauigkeit?
+                <div class="range-selector">
+                  <button
+                    v-for="opt in stepOptions"
+                    :key="opt.value"
+                    class="range-btn"
+                    :class="{ 'range-btn--active': selectedStep === opt.value }"
+                    @click.stop="selectedStep = opt.value"
+                  >{{ opt.label }}</button>
+                </div>
+              </label>
+            </template>
+
             <!-- Pyramid options -->
-            <template v-if="key === 'pyramid'">
+            <template v-else-if="key === 'pyramid'">
               <label class="option-label">
                 Wie viele Reihen?
                 <div class="row-selector">
@@ -168,6 +196,7 @@ const selectedKey = ref(null)
 
 // Per-quiz hardness levels (slider position stored independently per quiz)
 const hardness = ref({
+  clock:       saved.hardness?.clock       ?? 2,
   pyramid:     saved.hardness?.pyramid     ?? 2,
   addition:    saved.hardness?.addition    ?? 2,
   subtraction: saved.hardness?.subtraction ?? 2,
@@ -185,7 +214,18 @@ const pyramidRangeOptions = [
   { label: '1–100', value: 100 }
 ]
 
-// Subtraction options
+// Clock options
+const selectedClockCount = ref(saved.selectedClockCount ?? 5)
+const selectedStep = ref(saved.selectedStep ?? 60)
+
+const stepOptions = [
+  { label: 'Stunden',  value: 60 },
+  { label: 'Halbe',    value: 30 },
+  { label: 'Viertel',  value: 15 },
+  { label: '5 Min',    value: 5  },
+]
+
+// Subtraction / Addition options
 const selectedCount = ref(saved.selectedCount ?? 5)
 const selectedSubMaxVal = ref(saved.selectedSubMaxVal ?? 20)
 const resultOnly = ref(saved.resultOnly ?? true)
@@ -205,6 +245,10 @@ function setHardness(key, level) {
     selectedRows.value = p.rows
     selectedPyramidMaxVal.value = p.maxVal
     prefillEnabled.value = p.prefill
+  } else if (key === 'clock') {
+    const c = quizzes.clock.hardnessPresets[level - 1]
+    selectedClockCount.value = c.count
+    selectedStep.value = c.step
   } else if (key === 'addition' || key === 'subtraction') {
     const s = quizzes[key].hardnessPresets[level - 1]
     selectedCount.value = s.count
@@ -215,9 +259,11 @@ function setHardness(key, level) {
 
 // Persist all settings on any change
 watch(
-  [hardness, selectedRows, selectedPyramidMaxVal, prefillEnabled, selectedCount, selectedSubMaxVal, resultOnly],
+  [hardness, selectedClockCount, selectedStep, selectedRows, selectedPyramidMaxVal, prefillEnabled, selectedCount, selectedSubMaxVal, resultOnly],
   () => localStorage.setItem(STORAGE_KEY, JSON.stringify({
     hardness: hardness.value,
+    selectedClockCount: selectedClockCount.value,
+    selectedStep: selectedStep.value,
     selectedRows: selectedRows.value,
     selectedPyramidMaxVal: selectedPyramidMaxVal.value,
     prefillEnabled: prefillEnabled.value,
@@ -234,6 +280,8 @@ function start() {
   let options = {}
   if (selectedKey.value === 'pyramid') {
     options = { rows: selectedRows.value, maxVal: selectedPyramidMaxVal.value, prefill: prefillEnabled.value }
+  } else if (selectedKey.value === 'clock') {
+    options = { count: selectedClockCount.value, step: selectedStep.value }
   } else if (selectedKey.value === 'addition' || selectedKey.value === 'subtraction') {
     options = { count: selectedCount.value, maxVal: selectedSubMaxVal.value, resultOnly: resultOnly.value }
   }
