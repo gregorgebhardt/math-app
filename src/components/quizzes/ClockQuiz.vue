@@ -191,7 +191,8 @@ function initRound() {
 function newRound() { initRound() }
 
 function minuteMatches(entered, expected) {
-  return entered.length === 2 && Number(entered) === expected
+  if (!entered) return false
+  return Number(entered.padStart(2, '0')) === expected
 }
 
 function isCorrect(i) {
