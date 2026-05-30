@@ -61,7 +61,7 @@
 
           <!-- Simple row: Leicht (hour + Uhr) or Mittel/Schwer/Profi (hour : minute) -->
           <div v-if="!props.twentyFourHour" class="clock-input-row">
-            <span v-if="isCorrect(i)" class="clock-answer">{{ problem.hour }}</span>
+            <span v-if="isCorrect(i)" class="clock-answer">{{ props.amPmHint ? problem.hour24 : problem.hour }}</span>
             <input
               v-else
               :ref="el => { if (el) hourRefs[i] = el }"
@@ -184,7 +184,8 @@ function generateProblem() {
     if (props.amPmHint) {
       const isAfternoon = Math.random() < 0.5
       const hour = Math.floor(Math.random() * 11) + 1   // 1-11: avoids midnight and noon
-      return { hour, minute, isAfternoon }
+      const hour24 = isAfternoon ? hour + 12 : hour
+      return { hour, minute, isAfternoon, hour24 }
     }
     return { hour: Math.floor(Math.random() * 12) + 1, minute }
   }
@@ -223,6 +224,7 @@ function isCorrect(i) {
     problem:       problems.value[i],
     showMinute:    props.showMinute,
     twentyFourHour: props.twentyFourHour,
+    amPmHint:      props.amPmHint,
   })
 }
 
@@ -230,7 +232,7 @@ function onHourInput(i, event) {
   const raw = event.target.value.replace(/\D/g, '')
   userHours.value[i] = raw
   const p = problems.value[i]
-  if (raw !== '' && Number(raw) === p.hour) {
+  if (raw !== '' && Number(raw) === (props.amPmHint ? p.hour24 : p.hour)) {
     if (props.showMinute) {
       nextTick(() => minuteRefs.value[i]?.focus())
     } else if (props.twentyFourHour) {
