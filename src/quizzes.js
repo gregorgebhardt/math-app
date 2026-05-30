@@ -35,13 +35,13 @@ export const quizzes = {
     icon: IconClock,
     description: 'Lies die Uhrzeit ab und tippe sie ein.',
     component: ClockQuiz,
-    defaultOptions: { count: 5, step: 60 },
+    defaultOptions: { count: 5, step: 30, showMinute: true, twentyFourHour: false, amPmHint: true, showNumbers: true },
     hardnessPresets: [
-      { count: 3, step: 60, twentyFourHour: false, showNumbers: true  },
-      { count: 4, step: 60, twentyFourHour: true,  showNumbers: true  },
-      { count: 5, step: 15, twentyFourHour: true,  showNumbers: true  },
-      { count: 5, step: 5,  twentyFourHour: true,  showNumbers: false },
-      { count: 6, step: 5,  twentyFourHour: true,  showNumbers: false },
+      { count: 3, step: 60, showMinute: false, twentyFourHour: false, amPmHint: false, showNumbers: true  },
+      { count: 4, step: 60, showMinute: false, twentyFourHour: true,  amPmHint: false, showNumbers: true  },
+      { count: 5, step: 30, showMinute: true,  twentyFourHour: false, amPmHint: true,  showNumbers: true  },
+      { count: 5, step: 15, showMinute: true,  twentyFourHour: false, amPmHint: true,  showNumbers: false },
+      { count: 6, step: 5,  showMinute: true,  twentyFourHour: false, amPmHint: true,  showNumbers: false },
     ]
   },
   addition: {

@@ -52,9 +52,12 @@
             <circle cx="50" cy="50" r="4" fill="#2d2416"/>
           </svg>
 
-          <!-- Time inputs -->
+          <!-- AM/PM hint badge (Mittel+) -->
+          <div v-if="props.amPmHint" class="clock-ampm-badge">
+            {{ problem.isAfternoon ? '☀️' : '🌙' }}
+          </div>
 
-          <!-- Simple 12h row -->
+          <!-- Simple row: Leicht (hour + Uhr) or Mittel/Schwer/Profi (hour : minute) -->
           <div v-if="!props.twentyFourHour" class="clock-input-row">
             <span v-if="isCorrect(i)" class="clock-answer">{{ problem.hour }}</span>
             <input
@@ -65,20 +68,23 @@
               @input="onHourInput(i, $event)"
               @keypress="allowOnlyDigits"
             />
-            <span class="clock-sep">:</span>
-            <span v-if="isCorrect(i)" class="clock-answer">{{ String(problem.minute).padStart(2, '0') }}</span>
-            <input
-              v-else
-              :ref="el => { if (el) minuteRefs[i] = el }"
-              type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2"
-              :value="userMinutes[i]"
-              placeholder="00"
-              @input="onMinuteInput(i, $event)"
-              @keypress="allowOnlyDigits"
-            />
+            <template v-if="props.showMinute">
+              <span class="clock-sep">:</span>
+              <span v-if="isCorrect(i)" class="clock-answer">{{ String(problem.minute).padStart(2, '0') }}</span>
+              <input
+                v-else
+                :ref="el => { if (el) minuteRefs[i] = el }"
+                type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2"
+                :value="userMinutes[i]"
+                placeholder="00"
+                @input="onMinuteInput(i, $event)"
+                @keypress="allowOnlyDigits"
+              />
+            </template>
+            <span v-else class="clock-uhr">Uhr</span>
           </div>
 
-          <!-- 24h grid: Vormittag/Nachmittag labels with minute spanning both rows -->
+          <!-- 24h grid (Einfach): Vormittag/Nachmittag, Uhr or minute spanning both rows -->
           <div v-else class="clock-24h-grid">
             <span class="cgrid-vm-label clock-24h-label clock-24h-label--vm">Vormittag:</span>
 
@@ -94,19 +100,22 @@
               />
             </div>
 
-            <!-- minute: spans both rows, vertically centred -->
+            <!-- spans both rows, vertically centred -->
             <div class="cgrid-minute">
-              <span class="clock-sep">:</span>
-              <span v-if="isCorrect(i)" class="clock-answer">{{ String(problem.minute).padStart(2, '0') }}</span>
-              <input
-                v-else
-                :ref="el => { if (el) minuteRefs[i] = el }"
-                type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2"
-                :value="userMinutes[i]"
-                placeholder="00"
-                @input="onMinuteInput(i, $event)"
-                @keypress="allowOnlyDigits"
-              />
+              <template v-if="props.showMinute">
+                <span class="clock-sep">:</span>
+                <span v-if="isCorrect(i)" class="clock-answer">{{ String(problem.minute).padStart(2, '0') }}</span>
+                <input
+                  v-else
+                  :ref="el => { if (el) minuteRefs[i] = el }"
+                  type="text" inputmode="numeric" pattern="[0-9]*" maxlength="2"
+                  :value="userMinutes[i]"
+                  placeholder="00"
+                  @input="onMinuteInput(i, $event)"
+                  @keypress="allowOnlyDigits"
+                />
+              </template>
+              <span v-else class="clock-uhr">Uhr</span>
             </div>
 
             <span class="cgrid-nm-label clock-24h-label clock-24h-label--nm">Nachmittag:</span>
@@ -144,9 +153,11 @@ import IconClock from '../icons/IconClock.vue'
 
 const props = defineProps({
   count:           { type: Number,  default: 5 },
-  step:            { type: Number,  default: 60 },
-  twentyFourHour:  { type: Boolean, default: true },
+  step:            { type: Number,  default: 30 },
+  twentyFourHour:  { type: Boolean, default: false },
   showNumbers:     { type: Boolean, default: true },
+  showMinute:      { type: Boolean, default: true },
+  amPmHint:        { type: Boolean, default: true },
 })
 
 defineEmits(['back'])
@@ -162,15 +173,22 @@ const hourRefs24h = ref([])
 
 function generateProblem() {
   const stepsPerHour = 60 / props.step
-  const minute = Math.floor(Math.random() * stepsPerHour) * props.step % 60
+  const minute = props.showMinute
+    ? Math.floor(Math.random() * stepsPerHour) * props.step % 60
+    : 0
 
   if (!props.twentyFourHour) {
-    return { hour: Math.floor(Math.random() * 12) + 1, minute }
+    const hour = Math.floor(Math.random() * 12) + 1
+    if (props.amPmHint) {
+      const isAfternoon = Math.random() < 0.5
+      return { hour, minute, isAfternoon }
+    }
+    return { hour, minute }
   }
 
-  // Always generate a PM time so hour24 is always unambiguous (no AM/PM guess from clock face)
-  const hour = Math.floor(Math.random() * 12) + 1   // 1–12
-  const hour24 = hour === 12 ? 12 : hour + 12        // noon stays 12; 1–11 → 13–23
+  // 24h mode (Einfach): always PM so Nachmittag = hour + 12, unambiguous
+  const hour = Math.floor(Math.random() * 12) + 1
+  const hour24 = hour === 12 ? 12 : hour + 12
   return { hour, minute, hour24 }
 }
 
@@ -196,7 +214,7 @@ function isCorrect(i) {
   const p = problems.value[i]
   if (!p) return false
   const hourOk   = userHours.value[i] !== '' && Number(userHours.value[i]) === p.hour
-  const minuteOk = minuteMatches(userMinutes.value[i], p.minute)
+  const minuteOk = !props.showMinute || minuteMatches(userMinutes.value[i], p.minute)
   if (!props.twentyFourHour) return hourOk && minuteOk
   const hour24Ok = user24hHours.value[i] !== '' && Number(user24hHours.value[i]) === p.hour24
   return hourOk && minuteOk && hour24Ok
@@ -206,7 +224,13 @@ function onHourInput(i, event) {
   const raw = event.target.value.replace(/\D/g, '')
   userHours.value[i] = raw
   if (raw !== '' && Number(raw) === problems.value[i].hour) {
-    nextTick(() => minuteRefs.value[i]?.focus())
+    if (props.showMinute) {
+      nextTick(() => minuteRefs.value[i]?.focus())
+    } else if (props.twentyFourHour) {
+      nextTick(() => hourRefs24h.value[i]?.focus())
+    } else {
+      nextTick(() => focusNext(i))
+    }
   }
 }
 

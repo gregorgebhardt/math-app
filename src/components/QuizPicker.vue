@@ -99,6 +99,36 @@
                   >Striche</button>
                 </div>
               </label>
+              <label class="option-label">
+                Minuten?
+                <div class="toggle-row">
+                  <button
+                    class="toggle-btn toggle-btn--wide"
+                    :class="{ 'toggle-btn--active': clockShowMinute }"
+                    @click.stop="clockShowMinute = true"
+                  >An</button>
+                  <button
+                    class="toggle-btn toggle-btn--wide"
+                    :class="{ 'toggle-btn--active': !clockShowMinute }"
+                    @click.stop="clockShowMinute = false"
+                  >Aus</button>
+                </div>
+              </label>
+              <label class="option-label">
+                VM/NM Hinweis?
+                <div class="toggle-row">
+                  <button
+                    class="toggle-btn toggle-btn--wide"
+                    :class="{ 'toggle-btn--active': clockAmPmHint }"
+                    @click.stop="clockAmPmHint = true"
+                  >An</button>
+                  <button
+                    class="toggle-btn toggle-btn--wide"
+                    :class="{ 'toggle-btn--active': !clockAmPmHint }"
+                    @click.stop="clockAmPmHint = false"
+                  >Aus</button>
+                </div>
+              </label>
             </template>
 
             <!-- Pyramid options -->
@@ -246,9 +276,11 @@ const pyramidRangeOptions = [
 
 // Clock options
 const selectedClockCount  = ref(saved.selectedClockCount  ?? 5)
-const selectedStep        = ref(saved.selectedStep        ?? 60)
-const clockTwentyFourHour = ref(saved.clockTwentyFourHour ?? true)
+const selectedStep        = ref(saved.selectedStep        ?? 30)
+const clockTwentyFourHour = ref(saved.clockTwentyFourHour ?? false)
 const clockShowNumbers    = ref(saved.clockShowNumbers    ?? true)
+const clockShowMinute     = ref(saved.clockShowMinute     ?? true)
+const clockAmPmHint       = ref(saved.clockAmPmHint       ?? true)
 
 const stepOptions = [
   { label: 'Stunden',  value: 60 },
@@ -283,6 +315,8 @@ function setHardness(key, level) {
     selectedStep.value        = c.step
     clockTwentyFourHour.value = c.twentyFourHour
     clockShowNumbers.value    = c.showNumbers
+    clockShowMinute.value     = c.showMinute
+    clockAmPmHint.value       = c.amPmHint
   } else if (key === 'addition' || key === 'subtraction') {
     const s = quizzes[key].hardnessPresets[level - 1]
     selectedCount.value = s.count
@@ -294,6 +328,7 @@ function setHardness(key, level) {
 // Persist all settings on any change
 watch(
   [hardness, selectedClockCount, selectedStep, clockTwentyFourHour, clockShowNumbers,
+   clockShowMinute, clockAmPmHint,
    selectedRows, selectedPyramidMaxVal, prefillEnabled, selectedCount, selectedSubMaxVal, resultOnly],
   () => localStorage.setItem(STORAGE_KEY, JSON.stringify({
     hardness: hardness.value,
@@ -301,6 +336,8 @@ watch(
     selectedStep: selectedStep.value,
     clockTwentyFourHour: clockTwentyFourHour.value,
     clockShowNumbers: clockShowNumbers.value,
+    clockShowMinute: clockShowMinute.value,
+    clockAmPmHint: clockAmPmHint.value,
     selectedRows: selectedRows.value,
     selectedPyramidMaxVal: selectedPyramidMaxVal.value,
     prefillEnabled: prefillEnabled.value,
@@ -318,7 +355,7 @@ function start() {
   if (selectedKey.value === 'pyramid') {
     options = { rows: selectedRows.value, maxVal: selectedPyramidMaxVal.value, prefill: prefillEnabled.value }
   } else if (selectedKey.value === 'clock') {
-    options = { count: selectedClockCount.value, step: selectedStep.value, twentyFourHour: clockTwentyFourHour.value, showNumbers: clockShowNumbers.value }
+    options = { count: selectedClockCount.value, step: selectedStep.value, twentyFourHour: clockTwentyFourHour.value, showNumbers: clockShowNumbers.value, showMinute: clockShowMinute.value, amPmHint: clockAmPmHint.value }
   } else if (selectedKey.value === 'addition' || selectedKey.value === 'subtraction') {
     options = { count: selectedCount.value, maxVal: selectedSubMaxVal.value, resultOnly: resultOnly.value }
   }
