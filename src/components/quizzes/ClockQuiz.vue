@@ -52,10 +52,12 @@
             <circle cx="50" cy="50" r="4" fill="#2d2416"/>
           </svg>
 
-          <!-- AM/PM hint badge (Mittel+) -->
-          <div v-if="props.amPmHint" class="clock-ampm-badge">
-            {{ problem.isAfternoon ? '☀️' : '🌙' }}
-          </div>
+          <!-- Context label (Mittel+): tells student Vormittag or Nachmittag so they write 24h -->
+          <div
+            v-if="props.amPmHint"
+            class="clock-ampm-badge"
+            :class="problem.isAfternoon ? 'clock-ampm-badge--nm' : 'clock-ampm-badge--vm'"
+          >{{ problem.isAfternoon ? 'Nachmittag' : 'Vormittag' }}</div>
 
           <!-- Simple row: Leicht (hour + Uhr) or Mittel/Schwer/Profi (hour : minute) -->
           <div v-if="!props.twentyFourHour" class="clock-input-row">
@@ -150,6 +152,7 @@
 <script setup>
 import { ref, computed, nextTick } from 'vue'
 import IconClock from '../icons/IconClock.vue'
+import { minuteMatches, clockIsCorrect } from '../../utils/clock.js'
 
 const props = defineProps({
   count:           { type: Number,  default: 5 },
@@ -180,10 +183,10 @@ function generateProblem() {
   if (!props.twentyFourHour) {
     if (props.amPmHint) {
       const isAfternoon = Math.random() < 0.5
-      // AM: 1-11 (skip midnight 12 AM = 00:00, confusing for kids)
-      // PM: 1-11 (skip noon where clock=12 would be ambiguous with midnight)
+      // 1-11 avoids midnight (12 AM) and noon (12 PM) edge cases
       const hour = Math.floor(Math.random() * 11) + 1
-      return { hour, minute, isAfternoon }
+      const hour24 = isAfternoon ? hour + 12 : hour
+      return { hour, minute, isAfternoon, hour24 }
     }
     return { hour: Math.floor(Math.random() * 12) + 1, minute }
   }
@@ -207,25 +210,24 @@ function initRound() {
 
 function newRound() { initRound() }
 
-function minuteMatches(entered, expected) {
-  if (!entered) return false
-  return Number(entered.padStart(2, '0')) === expected
-}
-
 function isCorrect(i) {
-  const p = problems.value[i]
-  if (!p) return false
-  const hourOk   = userHours.value[i] !== '' && Number(userHours.value[i]) === p.hour
-  const minuteOk = !props.showMinute || minuteMatches(userMinutes.value[i], p.minute)
-  if (!props.twentyFourHour) return hourOk && minuteOk
-  const hour24Ok = user24hHours.value[i] !== '' && Number(user24hHours.value[i]) === p.hour24
-  return hourOk && minuteOk && hour24Ok
+  return clockIsCorrect({
+    userHour:   userHours.value[i],
+    userMinute: userMinutes.value[i],
+    userHour24: user24hHours.value[i],
+    problem:    problems.value[i],
+    showMinute:    props.showMinute,
+    twentyFourHour: props.twentyFourHour,
+    amPmHint:   props.amPmHint,
+  })
 }
 
 function onHourInput(i, event) {
   const raw = event.target.value.replace(/\D/g, '')
   userHours.value[i] = raw
-  if (raw !== '' && Number(raw) === problems.value[i].hour) {
+  const p = problems.value[i]
+  const target = props.amPmHint ? p.hour24 : p.hour
+  if (raw !== '' && Number(raw) === target) {
     if (props.showMinute) {
       nextTick(() => minuteRefs.value[i]?.focus())
     } else if (props.twentyFourHour) {

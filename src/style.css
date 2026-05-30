@@ -739,11 +739,13 @@ button, .btn {
 }
 
 .clock-ampm-badge {
-  font-size: 1.2rem;
+  font-size: 0.75rem;
+  font-weight: 700;
   text-align: center;
-  line-height: 1;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.25rem;
 }
+.clock-ampm-badge--vm { color: #1d4ed8; }
+.clock-ampm-badge--nm { color: #b45309; }
 
 .clock-answer {
   width: 2.8rem;
